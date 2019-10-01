@@ -21,7 +21,7 @@ export default function convertBytesToHuman(bytes) {
           k++;
     }
       if (k > 5){
-          return "Too large number or data.Sorry("
+          return "Too large number or data.Sorry(";
       }
       else{
             bytes = bytes.toFixed(2);
