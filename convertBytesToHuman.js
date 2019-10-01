@@ -24,8 +24,13 @@ export default function convertBytesToHuman(bytes) {
           return "Too large number or data.Sorry("
       }
       else{
-          bytes = bytes.toFixed(2);
-          return bytes + ' ' + arr[k]; 
+            bytes = bytes.toFixed(2);
+            if (((bytes * 100) % 100) != 0 ){
+                return bytes + ' ' + arr[k]; 
+            }
+            else{
+                return Math.round(bytes) + ' ' + arr[k];
+            } 
       }
   }
   else{
