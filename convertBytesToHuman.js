@@ -12,7 +12,8 @@
  * и класса (например, отрицательные числа)
  */
 
-export default function convertBytesToHuman(bytes) {arr = ['B','KB','MB','GB','TB','PB'];
+export default function convertBytesToHuman(bytes) {
+  let arr = ['B','KB','MB','GB','TB','PB'];
   let k = 0;
   if (typeof(bytes) == 'number' && bytes > 0 && (bytes % 1 === 0)){
       while(bytes >= 1024){

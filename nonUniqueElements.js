@@ -25,7 +25,7 @@ nonUniqueElements([10, 9, 10, 10, 9, 8]) == [10, 9, 10, 10, 9]
  */
 
 export default function nonUniqueElements(data) {
-  arr = [];
+  let arr = [];
   for (let i = 0; i < data.length; i++){
     for (let j = 0; j < data.length; j++){
       if(j != i){
