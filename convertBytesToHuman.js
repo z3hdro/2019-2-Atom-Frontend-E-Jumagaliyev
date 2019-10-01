@@ -12,6 +12,22 @@
  * и класса (например, отрицательные числа)
  */
 
-export default function convertBytesToHuman(bytes) {
-  // your solution goes here
+export default function convertBytesToHuman(bytes) {arr = ['B','KB','MB','GB','TB','PB'];
+  let k = 0;
+  if (typeof(bytes) == 'number' && bytes > 0 && (bytes % 1 === 0)){
+      while(bytes >= 1024){
+          bytes = bytes / 1024;
+          k++;
+    }
+      if (k > 5){
+          return "Too large number or data.Sorry("
+      }
+      else{
+          bytes = bytes.toFixed(2);
+          return bytes + ' ' + arr[k]; 
+      }
+  }
+  else{
+      return false;
+  }
 }
