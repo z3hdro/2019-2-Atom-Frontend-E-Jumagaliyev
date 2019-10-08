@@ -1,4 +1,4 @@
-const template = document.createElement('template');
+const template = document.createElement('template')
 template.innerHTML = `
     <style>
         input {
@@ -24,28 +24,30 @@ template.innerHTML = `
 
 class FormInput extends HTMLElement {
     constructor () {
-        super();
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._shadowRoot.appendChild(template.content.cloneNode(true));
+        super()
+        // eslint-disable-next-line no-underscore-dangle
+        this._shadowRoot = this.attachShadow({ mode: 'open' })
+        // eslint-disable-next-line no-underscore-dangle
+        this._shadowRoot.appendChild(template.content.cloneNode(true))
 
-        this.$input = this.shadowRoot.querySelector('input');
+        this.$input = this.shadowRoot.querySelector('input')
     }
 
     static get observedAttributes() {
-        return ['name', 'value', 'placeholder', 'disabled'];
+        return ['name', 'value', 'placeholder', 'disabled']
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        this.$input.setAttribute(name, newValue);
+        this.$input.setAttribute(name, newValue)
     }
 
     set value(newValue){
-        this.$input.value = newValue;
+        this.$input.value = newValue
     }
 
     get value() {
-        return this.$input.value;
+        return this.$input.value
     }
 }
 
-customElements.define('form-input', FormInput);
+customElements.define('form-input', FormInput)
