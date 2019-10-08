@@ -3,14 +3,21 @@ template.innerHTML = `
     <style>
         input {
             border: 0;
+            border-top: 5px solid silver;
             outline: none;
-            width: calc(100% - 2px);
+            width: 100%;
+            height: 130px;
+            font-size: 60px;
+            padding: 25px 50px;
+            margin: 0;
+            position: fixed;
+            bottom: 0;
         }
 
         :host {
             display: inline-block;
-            border: 1px solid rgba(25, 25, 25, 0.32);
         }
+
     </style>
     <input type="text">
 `;
@@ -30,6 +37,10 @@ class FormInput extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         this.$input.setAttribute(name, newValue);
+    }
+
+    set value(newValue){
+        this.$input.value = newValue;
     }
 
     get value() {
