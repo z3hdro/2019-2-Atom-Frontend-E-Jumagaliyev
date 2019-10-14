@@ -7,7 +7,7 @@ template.innerHTML = `
         <style>
             .chat-box {
                 background: lightblue;
-                border-radius: 15px;
+                border-radius: 25px;
                 width: auto;
                 padding: 15px;
                 margin-bottom: 50px;
@@ -28,10 +28,6 @@ template.innerHTML = `
                 line-height: 45px;
                 
             }
-        
-        
-        
-        
         </style>
         <div class = 'chat-box'>
             <span class='chat-author'></span>

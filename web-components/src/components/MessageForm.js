@@ -11,7 +11,7 @@ template.innerHTML = `
 
         .chat-header{
             background: lightpink;
-            height: 250px;
+            height: 130px;
             width: 100%;
             position: fixed;
             top: 0;
@@ -24,8 +24,9 @@ template.innerHTML = `
             align-items: flex-end;
             padding: 50px;
             overflow: hidden;
-            margin-top: 220px;
-            margin-bottom: 80px;
+            margin-top: 100px;
+            margin-bottom: 30px;
+            
         }
 
         
@@ -56,14 +57,14 @@ class MessageForm extends HTMLElement {
     this.$form.addEventListener('submit', this._onSubmit.bind(this));
     this.$form.addEventListener('keypress', this._onKeyPress.bind(this));
 
+    const messages = localStorage.getItem('messages').split('/%$#@');
     // eslint-disable-next-line no-plusplus
-    for (let element = 0; element < localStorage.length - 1; element++) {
+    for (let element = 0; element < messages.length; element++) {
       const $content = document.createElement('message-box');
-      const str = localStorage.getItem(`id-${element}`);
-      const arr = str.split('@#$%/');
-      $content.textV = arr[0];
-      $content.timeV = arr[1];
-      $content.authorV = arr[2];
+      const arr = messages[element].split('@#$%/');
+      $content.authorV = arr[0];
+      $content.textV = arr[1];
+      $content.timeV = arr[2];
       this.$message.appendChild($content);
       this.$message.scrollTop = this.$message.scrollHeight;
     }
@@ -76,12 +77,18 @@ class MessageForm extends HTMLElement {
       const time = new Date();
       const author = 'you';
       const $newmessage = document.createElement('message-box');
-      localStorage.setItem(`id-${(localStorage.length - 1)}`, (`${this.$input.value}@#$%/${time.toTimeString().slice(0, 5)}@#$%/${author}`));
+      if (localStorage.getItem('messages') === null) {
+        localStorage.setItem('messages', `${author}@#$%/${this.$input.value}@#$%/${time.toTimeString().slice(0, 5)}`);
+      } else {
+        localStorage.setItem('messages', `${localStorage.getItem('messages')}/%$#@${author}@#$%/${this.$input.value}@#$%/${time.toTimeString().slice(0, 5)}`);
+      }
+
       $newmessage.textV = this.$input.value;
       $newmessage.authorV = author;
       $newmessage.timeV = time.toTimeString().slice(0, 5);
       this.$message.appendChild($newmessage);
       this.$input.value = '';
+      window.scrollTo(0, document.body.scrollHeight);
     }
   }
 
