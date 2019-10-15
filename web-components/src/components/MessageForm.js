@@ -57,14 +57,15 @@ class MessageForm extends HTMLElement {
     this.$form.addEventListener('submit', this._onSubmit.bind(this));
     this.$form.addEventListener('keypress', this._onKeyPress.bind(this));
 
-    const messages = localStorage.getItem('messages').split('/%$#@');
+    const messages = JSON.parse(localStorage.getItem('messages'));
     // eslint-disable-next-line no-plusplus
     for (let element = 0; element < messages.length; element++) {
       const $content = document.createElement('message-box');
-      const arr = messages[element].split('@#$%/');
-      $content.authorV = arr[0];
-      $content.textV = arr[1];
-      $content.timeV = arr[2];
+      $content.authorV = messages[element];
+      element += 1;
+      $content.textV = messages[element];
+      element += 1;
+      $content.timeV = messages[element];
       this.$message.appendChild($content);
       this.$message.scrollTop = this.$message.scrollHeight;
     }
@@ -78,9 +79,13 @@ class MessageForm extends HTMLElement {
       const author = 'you';
       const $newmessage = document.createElement('message-box');
       if (localStorage.getItem('messages') === null) {
-        localStorage.setItem('messages', `${author}@#$%/${this.$input.value}@#$%/${time.toTimeString().slice(0, 5)}`);
+        localStorage.setItem('messages', JSON.stringify([author, this.$input.value, time.toTimeString().slice(0, 5)]));
       } else {
-        localStorage.setItem('messages', `${localStorage.getItem('messages')}/%$#@${author}@#$%/${this.$input.value}@#$%/${time.toTimeString().slice(0, 5)}`);
+        const next = JSON.parse(localStorage.getItem('messages'));
+        next.push(author);
+        next.push(this.$input.value);
+        next.push(time.toTimeString().slice(0, 5));
+        localStorage.setItem('messages', JSON.stringify(next));
       }
 
       $newmessage.textV = this.$input.value;
