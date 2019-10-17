@@ -57,17 +57,19 @@ class MessageForm extends HTMLElement {
     this.$form.addEventListener('submit', this._onSubmit.bind(this));
     this.$form.addEventListener('keypress', this._onKeyPress.bind(this));
 
-    const messages = JSON.parse(localStorage.getItem('messages'));
-    // eslint-disable-next-line no-plusplus
-    for (let element = 0; element < messages.length; element++) {
-      const $content = document.createElement('message-box');
-      $content.authorV = messages[element];
-      element += 1;
-      $content.textV = messages[element];
-      element += 1;
-      $content.timeV = messages[element];
-      this.$message.appendChild($content);
-      this.$message.scrollTop = this.$message.scrollHeight;
+    if (localStorage.getItem('messages') !== null) {
+      const messages = JSON.parse(localStorage.getItem('messages'));
+      // eslint-disable-next-line no-plusplus
+      for (let element = 0; element < messages.length; element++) {
+        const $content = document.createElement('message-box');
+        $content.authorV = messages[element];
+        element += 1;
+        $content.textV = messages[element];
+        element += 1;
+        $content.timeV = messages[element];
+        this.$message.appendChild($content);
+        this.$message.scrollTop = this.$message.scrollHeight;
+      }
     }
   }
 
