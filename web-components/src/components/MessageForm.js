@@ -15,7 +15,27 @@ template.innerHTML = `
             width: 100%;
             position: fixed;
             top: 0;
-        }    
+            display: flex;
+            align-items: center;
+            
+        }
+        
+        .backimg {
+          flex: 1
+        }
+
+        .backimg img{
+          padding-left: 2vh;
+          width: 4.5vh;
+        }
+
+        .Header-chat {
+          padding-left: 5vh;
+          font-weight: bold;
+          font-size: 3.5vh;
+          font-family: Segoe UI;
+          flex: 3
+        }
 
         .result {
             background: #ebdddd;
@@ -28,7 +48,10 @@ template.innerHTML = `
             margin-bottom: 30px;
             
         }
-
+        
+        .imgclick {
+          width: 6vh;
+        }
         
 
         input[type=submit] {
@@ -38,7 +61,10 @@ template.innerHTML = `
     </style>
     <form>
         <div class='chat-header'>
-        <h1 style='text-align:center'>Header and etc</h1>
+          <div class='backimg'>
+            <img class='imgclick' src='http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911640directionalleft.png'>
+          </div>
+        <p class='Header-chat'>Header</p>
         </div>
         <div class="result"></div>
         <form-input name="message-text" placeholder="Сообщение"></form-input>
@@ -53,12 +79,21 @@ class MessageForm extends HTMLElement {
     this.$form = this._shadowRoot.querySelector('form');
     this.$input = this._shadowRoot.querySelector('form-input');
     this.$message = this._shadowRoot.querySelector('.result');
+    this.$backBtn = this._shadowRoot.querySelector('.imgclick');
+    this.$username = this._shadowRoot.querySelector('.Header-chat');
 
     this.$form.addEventListener('submit', this._onSubmit.bind(this));
     this.$form.addEventListener('keypress', this._onKeyPress.bind(this));
+  }
 
-    if (localStorage.getItem('messages') !== null) {
-      const messages = JSON.parse(localStorage.getItem('messages'));
+  static get observedAttributes() {
+    return ['name'];
+  }
+
+  connectedCallback() {
+    this.$username.innerHTML = this.getAttribute('name');
+    if (localStorage.getItem(this.getAttribute('name')) !== null) {
+      const messages = JSON.parse(localStorage.getItem(this.getAttribute('name')));
       // eslint-disable-next-line no-plusplus
       for (let element = 0; element < messages.length; element++) {
         const $content = document.createElement('message-box');
@@ -71,6 +106,7 @@ class MessageForm extends HTMLElement {
         this.$message.scrollTop = this.$message.scrollHeight;
       }
     }
+    this.$backBtn.addEventListener('click', this.moveBack.bind(this));
   }
 
   _onSubmit(event) {
@@ -80,14 +116,14 @@ class MessageForm extends HTMLElement {
       const time = new Date();
       const author = 'you';
       const $newmessage = document.createElement('message-box');
-      if (localStorage.getItem('messages') === null) {
-        localStorage.setItem('messages', JSON.stringify([author, this.$input.value, time.toTimeString().slice(0, 5)]));
+      if (localStorage.getItem(this.getAttribute('name')) === null) {
+        localStorage.setItem(this.getAttribute('name'), JSON.stringify([author, this.$input.value, time.toTimeString().slice(0, 5)]));
       } else {
-        const next = JSON.parse(localStorage.getItem('messages'));
+        const next = JSON.parse(localStorage.getItem(this.getAttribute('name')));
         next.push(author);
         next.push(this.$input.value);
         next.push(time.toTimeString().slice(0, 5));
-        localStorage.setItem('messages', JSON.stringify(next));
+        localStorage.setItem(this.getAttribute('name'), JSON.stringify(next));
       }
 
       $newmessage.textV = this.$input.value;
@@ -103,6 +139,13 @@ class MessageForm extends HTMLElement {
     if (event.keyCode == 13) {
       this.$form.dispatchEvent(new Event('submit'));
     }
+  }
+
+  /**
+   * @param {any} value
+   */
+  set quit(value) {
+    this.moveBack = value;
   }
 }
 
