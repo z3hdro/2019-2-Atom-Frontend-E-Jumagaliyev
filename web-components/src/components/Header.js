@@ -1,3 +1,6 @@
+import { throwStatement } from '@babel/types';
+
+/* eslint-disable class-methods-use-this */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
@@ -53,7 +56,7 @@ template.innerHTML = `
 
         .finder-btn img.closePic {
             margin-left: 1vh;
-            width: 3vh;
+            width: 4vh;
         }
 
         .text-holder {
@@ -75,7 +78,9 @@ template.innerHTML = `
             <p>Messenger</p>
         </div>
         <div class='finder-btn'>
-            <img class='findPic' src='http://s1.iconbird.com/ico/2013/1/569/w24h24138981479606magnify.png'>
+            <form>
+                <img class='findPic' src='http://s1.iconbird.com/ico/2013/1/569/w24h24138981479606magnify.png'>
+            </form>
         </div>
     </div>
 `;
@@ -114,12 +119,7 @@ class ChatHeader extends HTMLElement {
       findBtn.src = 'http://s1.iconbird.com/ico/2013/1/569/w24h24138981479606magnify.png';
       this.$finderContainer.appendChild(findBtn);
     });
-    this.findValue = this.shadowRoot.querySelector('.text-holder').value;
     this.$finderContainer.appendChild(closeBtn);
-  }
-
-  get matching() {
-    return this.findValue;
   }
 }
 
