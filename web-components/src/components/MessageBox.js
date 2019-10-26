@@ -12,6 +12,11 @@ template.innerHTML = `
                 padding: 15px;
                 margin-bottom: 50px;
                 max-width: 700px;
+                transition: background 1s;
+            }
+
+            .chat-box:hover {
+                background: #00B5E4;
             }
 
             span {

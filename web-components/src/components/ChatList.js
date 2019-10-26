@@ -25,7 +25,35 @@ template.innerHTML = `
           font-size: 3vh;
           font-family: Segoe UI;
           padding: 2vh 0 2vh 4vh;
-          opacity: 0.85;
+          opacity: 0.6;
+          animation: creating 1s;
+          animation-direction: normal;
+        }
+
+        @-webkit-keyframes creating {
+          from {
+            bottom: 0;
+            width: 0;
+          }
+          to {
+            bottom: 15%;
+            width: 80%;
+          }
+        }
+
+        @keyframes creating {
+          from {
+            bottom: 0;
+            width: 0;
+          }
+          to {
+            bottom: 15%;
+            width: 80%;
+          }
+        }
+
+        .create-chat:focus {
+          opacity:0.95;
         }
 
         .user-box {
@@ -38,6 +66,35 @@ template.innerHTML = `
           display: flex;
           justify-content: space-around;
           align-items: center;
+          animation: slidetoright 1.5s;
+          transition: background 1s;
+          
+        }
+
+        @-webkit-keyframes slidetoright{
+          from {
+            width: 0;
+            height: 5vh;
+          }
+          to {
+            width: 100%;
+            height: 10vh;
+          }
+        }
+
+        @keyframes slidetoright {
+          from {
+            width: 0;
+            height: 5vh;
+          }
+          to {
+            width: 100%;
+            height: 10vh;
+          }
+        }
+
+        .user-box:hover {
+          background: #C2A3BB;
         }
 
         .avatar {
@@ -178,6 +235,7 @@ class ChatList extends HTMLElement {
       this.$form.addEventListener('submit', this._onSubmit.bind(this));
       this.$form.addEventListener('keypress', this._onKeyPress.bind(this));
     } else {
+      this.$txt.style.animationDirection = 'reverse';
       this.$txt.remove();
     }
   }
