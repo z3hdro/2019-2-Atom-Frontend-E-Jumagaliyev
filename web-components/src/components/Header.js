@@ -64,9 +64,18 @@ template.innerHTML = `
             border-radius: 2vh;
             padding: 0vh 1vh 0vh 1vh;
             font-size: 2.5vh;
+            animation-name: slideleft;
+            animation-duration: 1.5s;
         }
 
-
+        @keyframes slideleft{
+            from {
+                width: 0;
+            }
+            to {
+                width: 60%;
+            }
+        }
 
     </style>
     <div class='chat-header'>

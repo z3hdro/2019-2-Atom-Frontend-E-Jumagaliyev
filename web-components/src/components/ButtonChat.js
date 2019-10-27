@@ -11,15 +11,18 @@ template.innerHTML = `
             background: #cca92c;
             cursor: pointer;
             box-shadow: 0 0 0 rgba(204,169,44, 0.4);
-            animation: pulse 3s infinite;
+            animation: pulse 2s infinite;
             position: fixed;
             bottom: 4vh;
             right: 4vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 1s;
         }
         .btn-chat:hover {
+            background: #FFAB15; 
+            opacity: 0.75;
             animation: none;
           }
           
@@ -28,7 +31,7 @@ template.innerHTML = `
               -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
             }
             70% {
-                -webkit-box-shadow: 0 0 0 45px rgba(204,169,44, 0);
+                -webkit-box-shadow: 0 0 0 35px rgba(204,169,44, 0);
             }
             100% {
                 -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
@@ -40,8 +43,8 @@ template.innerHTML = `
               box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
             }
             70% {
-                -moz-box-shadow: 0 0 0 45px rgba(204,169,44, 0);
-                box-shadow: 0 0 0 45px rgba(204,169,44, 0);
+                -moz-box-shadow: 0 0 0 35px rgba(204,169,44, 0);
+                box-shadow: 0 0 0 35px rgba(204,169,44, 0);
             }
             100% {
                 -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
