@@ -1,48 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Counter from '../components/Counter';
-import ActionTypes from '../constants/ActionTypes';
-import { incrementIfOdd } from '../actions/counter';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Counter from '../components/Counter'
+import ActionTypes from '../constants/ActionTypes'
+import { incrementIfOdd } from '../actions/counter'
+import { connect } from 'react-redux'
 
 export class CounterContainer extends React.Component {
-	increment = () => {
-		const { dispatch } = this.props;
-		dispatch({ type: ActionTypes.INCREMENT_COUNTER });
-	};
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    counter: PropTypes.number.isRequired,
+  }
 
-	decrement = () => {
-		const { dispatch } = this.props;
-		dispatch({ type: ActionTypes.DECREMENT_COUNTER });
-	};
+  increment = () => {
+    this.props.dispatch({ type: ActionTypes.INCREMENT_COUNTER })
+  }
 
-	incrementIfOdd = () => {
-		incrementIfOdd();
-	};
+  decrement = () => {
+    this.props.dispatch({ type: ActionTypes.DECREMENT_COUNTER })
+  }
 
-	render() {
-		const { counter } = this.props;
+  incrementIfOdd = () => {
+    incrementIfOdd()
+  }
 
-		return (
-			<Counter
-				counter={counter}
-				increment={this.increment}
-				decrement={this.decrement}
-				incrementIfOdd={this.incrementIfOdd}
-			/>
-		);
-	}
+  render() {
+    return (
+      <Counter
+        counter={this.props.counter}
+        increment={this.increment}
+        decrement={this.decrement}
+        incrementIfOdd={this.incrementIfOdd}
+      />
+    )
+  }
 }
-
-CounterContainer.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-	counter: PropTypes.number.isRequired,
-};
 
 function mapStateToProps(state) {
-	return {
-		counter: state.counter,
-	};
+  return {
+    counter: state.counter,
+  }
 }
 
-export default connect(mapStateToProps)(CounterContainer);
+export default connect(mapStateToProps)(CounterContainer)
