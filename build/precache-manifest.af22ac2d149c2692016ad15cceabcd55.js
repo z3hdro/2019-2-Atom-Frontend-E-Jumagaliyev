@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b6fe7e701ac3459a7c502d402d0a2329",
+    "revision": "481008693795d4b795770eada2bcba69",
     "url": "/2019-2-Atom-Frontend-E-Jumagaliyev/index.html"
   },
   {
