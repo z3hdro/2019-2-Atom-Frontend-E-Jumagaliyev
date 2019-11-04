@@ -28,7 +28,7 @@ function Routes() {
 			<Container>
 				<Switch>
 					{component}
-					<Route path="/" component={CounterContainer} />
+					{/* <Route path="/" component={CounterContainer} /> */}
 				</Switch>
 			</Container>
 		</Router>
