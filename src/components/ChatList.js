@@ -1,26 +1,24 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
+
 import React, {useState, useEffect, useRef} from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles/chatlist.module.css';
 
 ;
 
-export default function ChatList(props) {
+export default function ChatList({route}) {
+	
 	const myRef = useRef(null);
 	const [chats, setChats] = useState([]);
 	const [toggle, setToggle] = useState(false);
 
 	useEffect(() => {
-		const users = localStorage.getItem('users') || "[]";
+		const users = localStorage.getItem('users') || '[]';
 		setChats(JSON.parse(users));
 	}, []);
 
 	useEffect(() => {
-		localStorage.setItem('users', JSON.stringify(chats))
-	},[chats])
+		localStorage.setItem('users', JSON.stringify(chats));
+	},[chats]);
 
 
 	const ChatHeader = () => {
@@ -36,38 +34,43 @@ export default function ChatList(props) {
 					<img className={styles.findPic} src='http://s1.iconbird.com/ico/2013/1/569/w24h24138981479606magnify.png' alt='FindBtn'/>
 				</div>
 			</div>
-		)
+		);
 	};
 
 	const lastMessage = (name) => {
 		const info = localStorage.getItem(name);
-		if (info !== "[]" && info !== null && info !== undefined) {
-			return JSON.parse(info)[JSON.parse(info).length - 1].content
+		if (info !== '[]' && info !== null && info !== undefined) {
+			const data =  JSON.parse(info);
+			return data[data.length - 1].content;
 		} 
-		return null
+		return null;
 	};
 
 	const lastMessageTime = (name) => {
 		const info = localStorage.getItem(name);
-		if (info !== "[]" && info !== null && info !== undefined) {
-			return JSON.parse(info)[JSON.parse(info).length - 1].time
+		if (info !== '[]' && info !== null && info !== undefined) {
+			const data =  JSON.parse(info);
+			return data[data.length - 1].time;
 		}
-		return null
+		return null;
 	};
 
 	const checked = (name) => {
 		const info = localStorage.getItem(name);
-		if (info !== "[]" && info !== null && info !== undefined) {
-			return 'http://s1.iconbird.com/ico/0912/fugue/w24h241349011565tick.png'
+		if (info !== '[]' && info !== null && info !== undefined) {
+			return 'http://s1.iconbird.com/ico/0912/fugue/w24h241349011565tick.png';
 		}
-		return null
+		return null;
 	};
 
-	function UserList(props) {
-		if (props.names !== "[]") {
-			const data = props.names.map((user) =>
+	function UserList(param) {
+		if (param.names !== '[]') {
+			const data = param.names.map((user) =>
 				<div className={styles.user_box} key={user.id}
-					onClick = {() => props.route(user.name)}
+					onClick = {() => param.route(user.name)}
+					onKeyPress={() => {}}
+					role = 'button'
+					tabIndex = '0'
 				>
 					<div className={styles.avatar}>
 						<img alt='User' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728710.png'/>
@@ -98,7 +101,7 @@ export default function ChatList(props) {
 						id: chats.length,
 						name: user
 					}
-				])
+				]);
 			}
 		}
 	};
@@ -109,12 +112,12 @@ export default function ChatList(props) {
 		return (
 			<input
 				className = {styles.create_chat}
-				type="text"
-				value = {user}
+				type='text'
+				value={user}
 				onChange={(event) => setUser(event.target.value)}
-				onKeyPress={(event) => {addUser(event, user.trim())}}
+				onKeyPress={(event) => {addUser(event, user.trim());}}
 			/>
-		) 
+		); 
 	};   
      
 	function toggleBtn() {
@@ -129,20 +132,24 @@ export default function ChatList(props) {
 				</button>
 				{toggle ? <CreateInput /> : null}
 			</div>
-		)
+		);
 	};
 
 	const scrollToBottom = () => {
-		myRef.current.scrollIntoView({ behavior: "smooth", block: "end"});
-	}
+		myRef.current.scrollIntoView({ behavior: 'smooth', block: 'end'});
+	};
 
 	useEffect(scrollToBottom, [chats]);
 
 	return (
 		<div>
 			<ChatHeader />
-			<UserList names = {chats} route={props.route}/>
+			<UserList names = {chats} route={route}/>
 			<CreateButton />
 		</div>
-	)
+	);
 }
+
+ChatList.propTypes = {
+	route : PropTypes.func.isRequired
+};

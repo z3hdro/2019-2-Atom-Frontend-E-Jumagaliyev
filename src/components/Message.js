@@ -1,32 +1,29 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
+
 import React, {useState, useEffect, useRef} from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 
-export default function Message(props) {
-	const myRef = useRef(null)
+export default function Message({route, name}) {
+	const myRef = useRef(null);
 
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
 	
 
 	useEffect(() => {
-		const msg = localStorage.getItem(props.name) || "[]";
+		const msg = localStorage.getItem(name) || '[]';
 		setMessages(JSON.parse(msg));
-	}, [props.name]);
+	}, [name]);
 
 
 	useEffect(() => {
-		localStorage.setItem(props.name, JSON.stringify(messages));
-	}, [messages, props.name]);
+		localStorage.setItem(name, JSON.stringify(messages));
+	}, [messages, name]);
  
 	
-	function MessageList(props) {
-		if (props.messages !== "[]") {
-			const data = props.messages.map((message) =>
+	function MessageList(param) {
+		if (param.messages !== '[]') {
+			const data = param.messages.map((message) =>
 				<div className={styles.chat_box} key={message.id}>
 					<span>{message.time}</span>
 					<p className={styles.chat_text}>{message.content}</p>
@@ -40,8 +37,8 @@ export default function Message(props) {
 	};
 
 	const scrollToBottom = () => {
-		myRef.current.scrollIntoView({ behavior: "smooth", block: "end"});
-	}
+		myRef.current.scrollIntoView({ behavior: 'smooth', block: 'end'});
+	};
 
 	useEffect(scrollToBottom, [messages]);
 
@@ -55,9 +52,9 @@ export default function Message(props) {
 						id: messages.length,
 						time: date.toTimeString().slice(0, 5),
 						content: newMessage,
-						author: "you"
+						author: 'you'
 					}
-				])
+				]);
 				setNewMessage('');
 			}
 		}
@@ -66,18 +63,28 @@ export default function Message(props) {
 	return ( 
 		<div>
 			<div className={styles.chat_header}>
-				<div className={styles.backimg}>
-					<img onClick={props.route} className={styles.imgclick} src='http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911640directionalleft.png' alt='back' />
+				<div className={styles.backimg}
+					role = 'button'
+					onClick={route}
+					onKeyPress={() => {}}
+					tabIndex = '0'>
+					<img className={styles.imgclick} 
+						src='http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911640directionalleft.png' alt='back' />
 				</div>
-				<p className={styles.header_chat}>{props.name}</p>
+				<p className={styles.header_chat}>{name}</p>
 			</div>
 			<MessageList messages = {messages} /> 
 			<input
-				type="text"
-				value = {newMessage}
+				type='text'
+				value={newMessage}
 				onChange={event => setNewMessage(event.target.value)}
 				onKeyPress={addMessage}
 			/>
 		</div>
-	)
+	);
 }
+
+Message.propTypes = {
+	name : PropTypes.string.isRequired,
+	route : PropTypes.func.isRequired
+};
