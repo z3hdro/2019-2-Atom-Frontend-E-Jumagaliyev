@@ -25,9 +25,9 @@ export default function Message({route, name}) {
 		if (param.messages !== '[]') {
 			const data = param.messages.map((message) =>
 				<div className={styles.chat_box} key={message.id}>
-					<span>{message.time}</span>
+					<span className={styles.msg}>{message.time}</span>
 					<p className={styles.chat_text}>{message.content}</p>
-					<span>{message.author}</span>
+					<span className={styles.msg}>{message.author}</span>
 				</div>
 			);
 			return (

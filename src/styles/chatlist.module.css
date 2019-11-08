@@ -1,13 +1,12 @@
-.messages{
-    width: 100%;
-    background: #ebdddd;
-    padding-top: 9vh;
-    display: flex;
-    flex-direction: column-reverse;
+.messages {
+  width: 100%;
+  background-color: rgb(235, 221, 221);
+  padding-top: 9vh;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 /* input */
-
 .create_chat {
   border-radius: 5vh;
   position: fixed;
@@ -16,55 +15,41 @@
   bottom: 15%;
   left: 2.5vh;
   font-size: 3vh;
-  font-family: Segoe UI;
+  font-family: Segoe UI, sans-serif;
   padding: 2vh 0 2vh 4vh;
   opacity: 0.6;
-  animation: creating 1s;
-  animation-direction: normal;
 }
 
-@keyframes creating {
-  from {
-    bottom: 0;
-    width: 0;
-  }
-  to {
-    bottom: 15%;
-    width: 80%;
-  }
-}
-
-.create_chat:focus {
+.create_chat:hover:focus {
   opacity: 0.95;
 }
 
 .user_box {
   width: 100%;
   height: 10vh;
-  background: #ebdddd;
-  border-bottom: 0.5vh solid lightpink;
+  background-color: rgb(234, 220, 220);
+  border-bottom: 0.5vh solid rgb(255, 182, 193);
   font-size: 3vh;
-  font-family: Segoe UI;
+  font-family: Segoe UI, sans-serif;
   display: flex;
   justify-content: space-around;
   align-items: center;
   animation: slidetoright 1.5s;
-  transition: background 1s;
+}
+
+.user_box:hover:focus {
+  background-color: rgb(194, 163, 187);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user_box {
+    animation: none;
+  }
 }
 
 @keyframes slidetoright {
-  from {
-    width: 0;
-    height: 5vh;
-  }
-  to {
-    width: 100%;
-    height: 10vh;
-  }
-}
-
-.user_box:hover {
-  background: #C2A3BB;
+  0% { transform: translate(-100vw, 0); }
+  50% { transform: translate(0, 0); }
 }
 
 .avatar {
@@ -73,11 +58,11 @@
   display: block;
   flex: 0;
   border-radius: 50%;
-  background: #fff;
+  background: rgb(255, 255, 255);
   margin-left: 2vh;
 }
 
-.avatar img{
+.avatar img {
   width: 6vh;
 }
 
@@ -100,7 +85,7 @@
 
 .chat_header {
   margin: 0;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 3vh;
   padding: 1vh 0 1vh 4vh;
 }
@@ -125,27 +110,22 @@
   width: 4vh;
 }
 
-/* 
-
-
-
-
+/*
 
 HEADER
 
-
  */
 
- .chatlist_header{
+.chatlist_header {
   width: 100%;
   height: 5vh;
-  background: lightpink;
+  background: rgb(255, 182, 193);
   padding: 2vh;
-  display:flex;
+  display: flex;
   justify-content: space-between;
   align-items: flex-end;
   font-size: 3vh;
-  font-family: Segoe UI;
+  font-family: Segoe UI, sans-serif;
   position: fixed;
 }
 
@@ -154,19 +134,19 @@ HEADER
   width: 5vh;
   height: 5vh;
   margin-left: 1vh;
-  background-color: #fff;
-  border-radius: 50%
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
 }
 
-.menu_btn img{
-  width:100%;
+.menu_btn img {
+  width: 100%;
 }
 
 .header_messenger {
   flex: 1;
 }
 
-.header_messenger p{
+.header_messenger p {
   margin: 1vh;
   padding-left: 2vh;
 }
@@ -193,39 +173,23 @@ HEADER
   width: 60%;
   height: 3vh;
   border-radius: 2vh;
-  padding: 0vh 1vh 0vh 1vh;
+  padding: 0 1vh 0 1vh;
   font-size: 2.5vh;
-  animation-name: slideleft;
-  animation-duration: 1.5s;
 }
 
-@keyframes slideleft{
-  from {
-      width: 0;
-  }
-  to {
-      width: 60%;
-  }
-}
-
-/* 
-
-
+/*
 
 Btn
 
-
-
-
  */
 
- .btn_chat{
+.btn_chat {
   width: 6vh;
   height: 6vh;
   border-radius: 50%;
-  background: #cca92c;
+  background: rgb(204, 169, 44);
   cursor: pointer;
-  box-shadow: 0 0 0 rgba(204,169,44, 0.4);
+  box-shadow: 0 0 0 rgba(204, 169, 44, 0.4);
   animation: pulse 2s infinite;
   position: fixed;
   bottom: 4vh;
@@ -233,30 +197,27 @@ Btn
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background 1s;
+  transition: background-color 1s;
 }
 
-.btn_chat:hover {
-  background: #FFAB15; 
+.btn_chat:hover:focus {
+  background-color: rgb(255, 171, 21);
   opacity: 0.75;
-  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn_chat {
+    animation: none;
+    transition: none;
+  }
 }
 
 @keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 35px rgba(204,169,44, 0);
-      box-shadow: 0 0 0 35px rgba(204,169,44, 0);
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.4); }
+  70% { box-shadow: 0 0 0 35px rgba(204, 169, 44, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(204, 169, 44, 0); }
 }
 
-.btn_chat img{
-  width:60%;
+.btn_chat img {
+  width: 60%;
 }
