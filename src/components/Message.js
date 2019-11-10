@@ -1,9 +1,11 @@
 
 import React, {useState, useEffect, useRef} from 'react';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 
-export default function Message({route, name}) {
+
+export default function Message({name}) {
 	const myRef = useRef(null);
 
 	const [messages, setMessages] = useState([]);
@@ -65,11 +67,13 @@ export default function Message({route, name}) {
 			<div className={styles.chat_header}>
 				<div className={styles.backimg}
 					role = 'button'
-					onClick={route}
+					onClick={() => {}}
 					onKeyPress={() => {}}
 					tabIndex = '0'>
-					<img className={styles.imgclick} 
-						src='http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911640directionalleft.png' alt='back' />
+					<Link to='/'>
+						<img className={styles.imgclick} 
+							src='http://s1.iconbird.com/ico/2014/1/598/w128h1281390846445leftround128.png' alt='back' />
+					</Link>
 				</div>
 				<p className={styles.header_chat}>{name}</p>
 			</div>
@@ -85,6 +89,5 @@ export default function Message({route, name}) {
 }
 
 Message.propTypes = {
-	name : PropTypes.string.isRequired,
-	route : PropTypes.func.isRequired
+	name : PropTypes.string.isRequired
 };

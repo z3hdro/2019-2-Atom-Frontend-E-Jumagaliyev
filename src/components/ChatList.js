@@ -1,11 +1,11 @@
 
 import React, {useState, useEffect, useRef} from 'react';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from '../styles/chatlist.module.css';
 
-;
 
-export default function ChatList({route}) {
+export default function ChatList() {
 	
 	const myRef = useRef(null);
 	const [chats, setChats] = useState([]);
@@ -20,12 +20,35 @@ export default function ChatList({route}) {
 		localStorage.setItem('users', JSON.stringify(chats));
 	},[chats]);
 
+	const MenuList = ({visible}) => {
+		return (
+			<div className={styles.menulist}>
+				<div className={styles.closeMenuBtn}
+					role = 'button'
+					onClick = {() => {
+						visible(false);}}
+					onKeyPress = {() => {}}
+					tabIndex = '0'>
+					<img alt='Close' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396727833.png'/>
+				</div>
+				<div className={styles.linksCont}>
+					<Link className={styles.links} to='/profile'>Profile</Link>
+				</div>
+			</div>
+		);
+	};
 
 	const ChatHeader = () => {
+		const [visible, setVisible] = useState(false);
 		return (
 			<div className={styles.chatlist_header}>
-				<div className={styles.menu_btn}>
+				<div className={styles.menu_btn}
+					role = 'button'
+					onClick = {() => setVisible(!visible)}
+					onKeyPress = {() => {}}
+					tabIndex = '0'>
 					<img src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396727847.png' alt='menu'/>
+					{visible ? <MenuList visible = {setVisible}/>: null}
 				</div>
 				<div className={styles.header_messenger}>
 					<p>Messenger</p>
@@ -66,17 +89,14 @@ export default function ChatList({route}) {
 	function UserList(param) {
 		if (param.names !== '[]') {
 			const data = param.names.map((user) =>
-				<div className={styles.user_box} key={user.id}
-					onClick = {() => param.route(user.name)}
-					onKeyPress={() => {}}
-					role = 'button'
-					tabIndex = '0'
-				>
+				<div className={styles.user_box} key={user.id}>
 					<div className={styles.avatar}>
 						<img alt='User' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728710.png'/>
 					</div>
 					<div className={styles.chatContainer}>
-						<p className={styles.chat_header}>{user.name}</p>
+						<Link className={styles.links} to= {`/message/:${user.name}`} >
+							<p className={styles.chat_header}>{user.name}</p>
+						</Link>
 						<p className={styles.msg}>{lastMessage(user.name)}</p>
 					</div>
 					<div className={styles.indicatorCont}>
@@ -144,12 +164,13 @@ export default function ChatList({route}) {
 	return (
 		<div>
 			<ChatHeader />
-			<UserList names = {chats} route={route}/>
+			<UserList names = {chats}/>
 			<CreateButton />
 		</div>
 	);
 }
 
 ChatList.propTypes = {
-	route : PropTypes.func.isRequired
+	// eslint-disable-next-line react/no-unused-prop-types
+	visible : PropTypes.func.isRequired
 };

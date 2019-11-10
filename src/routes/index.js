@@ -1,35 +1,38 @@
-import React, {useState} from 'react';
-import { Router, Switch } from 'react-router-dom';
+import React from 'react';
+import { 
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	useParams
+} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import styled from '@emotion/styled';
 import Message from '../components/Message';
 import ChatList from '../components/ChatList';
+import UserProfile from '../components/UserProfile';
 
-const Container = styled.div`
-  text-align: center;
-`;
 export const history = createBrowserHistory();
 
-function Routes() {
-	const [component, setComponent] = useState(
-		<ChatList route={(name) => openChat(name)} />,
+function Child() {
+	const { id } = useParams();
+	return (
+		<Message name = {id.slice(1,id.length)}/>
 	);
-	
-	const openChat = (name) => {
-		setComponent(<Message route={() => closeChat()} name={name} />);
-	};
-	
-	const closeChat = () => {
-		setComponent(<ChatList route={(name) => openChat(name)} />);
-	};
+}
+
+function Routes() {
 	return (
 		<Router history={history}>
-			<Container>
-				<Switch>
-					{component}
-					{/* <Route path="/" component={CounterContainer} /> */}
-				</Switch>
-			</Container>
+			<Switch>
+				<Route path='/profile'>
+					<UserProfile />
+				</Route>
+				<Route path='/message/:id'>
+					<Child />
+				</Route>
+				<Route path='/'>
+					<ChatList />
+				</Route>
+			</Switch>
 		</Router>
 	);
 }
