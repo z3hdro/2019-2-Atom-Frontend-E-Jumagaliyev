@@ -113,7 +113,7 @@ export default function UserProfile() {
 	};
 
 	return (
-		<div className={styles.container}>
+		<div className = {styles.container}>
 			<UserPageHeader/>
 			<UserPage/>
 		</div>
