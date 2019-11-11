@@ -33,6 +33,7 @@ export default function ChatList() {
 				</div>
 				<div className={styles.linksCont}>
 					<Link className={styles.links} to='/profile'>Profile</Link>
+					<Link className={styles.links} to='/support'>Support</Link>
 				</div>
 			</div>
 		);

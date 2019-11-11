@@ -12,6 +12,17 @@ import UserProfile from '../components/UserProfile';
 
 export const history = createBrowserHistory();
 
+function Support() {
+	return (
+		<div>
+			<h1>Жалобы и баги</h1>
+			<p>https://docs.google.com/document/d/1dcKpg02_kF_0wPfab8PfZArli03CLiQDusRqFfj5wks/edit</p>
+			<p> переходить по данной ссылке и отставлять жалобы)</p>
+
+		</div>
+	);
+}
+
 function Child() {
 	const { id } = useParams();
 	return (
@@ -28,6 +39,9 @@ function Routes() {
 				</Route>
 				<Route path='/message/:id'>
 					<Child />
+				</Route>
+				<Route path='/support'>
+					<Support />
 				</Route>
 				<Route path='/'>
 					<ChatList />

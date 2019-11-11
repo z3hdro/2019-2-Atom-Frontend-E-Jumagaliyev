@@ -66,6 +66,7 @@ export default function UserProfile() {
 					});
 				}
 			}
+			localStorage.setItem('userinfo', JSON.stringify(data));
 		}
 	};
 
@@ -87,7 +88,13 @@ export default function UserProfile() {
 						maxLength = '25'
 						value = {nameInfo}
 						onChange = {(event) => setNameInfo(event.target.value)}
-						onKeyPress = {(event) => SaveData(1, event, nameInfo.trim())}/>
+						onKeyPress = {(event) => SaveData(1, event, nameInfo.trim())}
+						onBlur = {()=> {
+							setData({
+								...data,
+								fullname: nameInfo.trim()
+							});
+						}}/>
 				</div>
 				<div className={styles.username}>
 					<p className={styles.textholdernames}>Username</p>
@@ -97,7 +104,13 @@ export default function UserProfile() {
 						maxLength = '20'
 						value = {userInfo}
 						onChange = {(event) => setUserInfo(event.target.value)}
-						onKeyPress = {(event) => SaveData(2, event, userInfo.trim())}/>
+						onKeyPress = {(event) => SaveData(2, event, userInfo.trim())}
+						onBlur = {() => {
+							setData({
+								...data,
+								username: userInfo.trim()
+							});
+						}}/>
 				</div>
 				<div className={styles.biography}>
 					<p className={styles.textholdernames}>Bio</p>
@@ -106,7 +119,13 @@ export default function UserProfile() {
 						maxLength = '150'
 						value = {BioInfo}
 						onChange = {(event) => setBioInfo(event.target.value)}
-						onKeyPress = {(event) => SaveData(3, event, BioInfo.trim())}/>
+						onKeyPress = {(event) => SaveData(3, event, BioInfo.trim())}
+						onBlur = {() => {
+							setData({
+								...data,
+								username: BioInfo.trim()
+							});
+						}}/>
 				</div>
 			</div>
 		);
