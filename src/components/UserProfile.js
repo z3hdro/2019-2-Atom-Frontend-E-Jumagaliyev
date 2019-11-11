@@ -45,7 +45,6 @@ export default function UserProfile() {
     
 	function SaveData(...input) {
 		if (input[1].key === 'Enter') {
-			input[1].preventDefault();
 			const flag = input[0];
 			const info = input[2];
 			if (info !== '') {
