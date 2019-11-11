@@ -16,7 +16,7 @@ function Support() {
 	return (
 		<div>
 			<h1>Жалобы и баги</h1>
-			<p>https://docs.google.com/document/d/1dcKpg02_kF_0wPfab8PfZArli03CLiQDusRqFfj5wks/edit</p>
+			<p><a>https://docs.google.com/document/d/1dcKpg02_kF_0wPfab8PfZArli03CLiQDusRqFfj5wks/edit</a></p>
 			<p> переходить по данной ссылке и отставлять жалобы)</p>
 
 		</div>
