@@ -30,11 +30,12 @@
   background-color: rgb(234, 220, 220);
   border-bottom: 0.5vh solid rgb(255, 182, 193);
   font-size: 3vh;
+  text-decoration: none;
   font-family: Segoe UI, sans-serif;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  animation: slidetoright 1.5s;
+  animation: slidetoright 1s;
 }
 
 .user_box:hover:focus {
@@ -48,7 +49,7 @@
 }
 
 @keyframes slidetoright {
-  0% { transform: translate(-100vw, 0); }
+  0% { transform: translate(200vw, 0); }
   50% { transform: translate(0, 0); }
 }
 
@@ -67,6 +68,7 @@
 }
 
 .chatContainer {
+  text-decoration: none;
   margin: 0;
   flex: 2;
   display: flex;
@@ -84,6 +86,7 @@
 }
 
 .chat_header {
+  text-decoration: none;
   margin: 0;
   font-weight: 500;
   font-size: 3vh;
@@ -140,6 +143,53 @@ HEADER
 
 .menu_btn img {
   width: 100%;
+}
+
+.menulist {
+  top: 2vh;
+  left: 0;
+  position: absolute;
+  height: auto;
+  width: auto;
+  border-radius: 1vh;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  animation: slide 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menulist {
+    animation: none;
+  }
+}
+
+@keyframes slide {
+  0% { transform: translate(0, -100vh); }
+  100% { transform: translate(0, 0); }
+}
+
+.linksCont {
+  padding: 0.5vh 1.5vw;
+  background-color: rgb(165, 164, 164);
+}
+
+.links {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+.links:focus:hover {
+  background-color: rgb(207, 206, 206);
+}
+
+.closeMenuBtn {
+  align-self: center;
+}
+
+.menulist img {
+  width: 4.5vh;
 }
 
 .header_messenger {
