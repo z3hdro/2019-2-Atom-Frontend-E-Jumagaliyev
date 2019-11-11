@@ -15,8 +15,7 @@ export const history = createBrowserHistory();
 function Support() {
 	return (
 		<div>
-			<h1>Жалобы и баги</h1>
-			<p><a>https://docs.google.com/document/d/1dcKpg02_kF_0wPfab8PfZArli03CLiQDusRqFfj5wks/edit</a></p>
+			<h1><a href='https://docs.google.com/document/d/1dcKpg02_kF_0wPfab8PfZArli03CLiQDusRqFfj5wks/edit'>Жалобы и баги</a></h1>
 			<p> переходить по данной ссылке и отставлять жалобы)</p>
 
 		</div>
