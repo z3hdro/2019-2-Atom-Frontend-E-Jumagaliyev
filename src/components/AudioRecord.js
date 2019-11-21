@@ -8,13 +8,14 @@ import styles from '../styles/message.module.css';
 export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) {
 	const [recordState, setRecordState] = useState({});
 	const [preview, setPreview] = useState(true);
+	const [previewTimer, setPreviewTimer] = useState(false);
 
 
 	useEffect(() => {
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 			navigator.mediaDevices.getUserMedia (
 				{audio: true}
-			)// eslint-disable-next-line func-names
+			)
 				.then(function(stream) {
 					const mediaRecorder = new MediaRecorder(stream);
 					setRecordState({stream: mediaRecorder});
@@ -82,26 +83,28 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 			</div>
 		]);
 	};
-                
-
+	
+	
 	return (
-		<div className = {styles.audio_button}
-			role = 'button'
-			onClick={(event) => {
-				if (preview) {
-					StartRecord(event);
-					setPreview(!preview);
-				}
-				else {
-					StopRecord(event);
-					setPreview(!preview);
-				}
-			}}
-			// onMouseDown={StartRecord}
-			// onMouseUp={StopRecord}
-			onKeyPress={() => {}}
-			tabIndex = '0'>
-			<img src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728712.png' alt='audioRecord'/>
+		<div>
+			<div className = {styles.audio_button}
+				role = 'button'
+				onClick={(event) => {
+					if (preview) {
+						StartRecord(event);
+						setPreview(!preview);
+						setPreviewTimer(!previewTimer);
+					}
+					else {
+						StopRecord(event);
+						setPreview(!preview);
+						setPreviewTimer(!previewTimer);
+					}
+				}}
+				onKeyPress={() => {}}
+				tabIndex = '0'>
+				<img src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728712.png' alt='audioRecord'/>
+			</div>
 		</div>
 	);
 };

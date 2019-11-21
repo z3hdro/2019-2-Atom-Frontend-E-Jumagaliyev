@@ -66,7 +66,7 @@
   padding: 0;
 }
 
-.audio_record audio{
+.audio_record audio {
   width: 33vh;
   height: 5vh;
 }
@@ -77,6 +77,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .chat_box {
+    transition: none;
+  }
+
+  .chat_box_audio {
     transition: none;
   }
 }
@@ -206,6 +210,7 @@
 }
 
 .audio_button {
+  border-radius: 50%;
   flex: 0;
   display: flex;
   justify-self: center;
@@ -213,7 +218,26 @@
   padding: 0 0.5vh;
 }
 
+.audio_button_on {
+  flex: 0;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  border-radius: 50%;
+  background-color: rgb(255, 104, 104);
+  padding: 0 0.5vh;
+}
+
 .audio_button img {
   text-align: center;
   width: 5.5vh;
+}
+
+.timer {
+  position: absolute;
+  width: 10vh;
+  height: 5vh;
+  background-color: hsl(0, 100%, 50%);
+  bottom: 7vh;
+  right: 0;
 }
