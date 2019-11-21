@@ -12,7 +12,7 @@ export default function UserProfile() {
 			setData(JSON.parse(userinfo));
 		}
 		else{
-			localStorage.setItem('usreinfo', JSON.stringify({fullname: '', username: '', biography: ''}));
+			localStorage.setItem('userinfo', JSON.stringify({fullname: '', username: '', biography: ''}));
 			setData({fullname: '', username: '', biography: ''});
 		}
 	}, []);
