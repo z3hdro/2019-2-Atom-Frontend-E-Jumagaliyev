@@ -69,15 +69,15 @@ export default function Message({name}) {
 		const [imageURL, setImageURL] = useState([]);
 		const [selectedFile, setSelectedFile] = useState();
 		const [chunks, setChunks] = useState([]);
-		const CurrMessageInput = useRef(null);
+		// const CurrMessageInput = useRef(null);
 		const fileInput = React.createRef();
 
 
-		const inputFocus = () => {
-			CurrMessageInput.current.focus();
-		};
+		// const inputFocus = () => {
+		// 	CurrMessageInput.current.focus();
+		// };
 	
-		useEffect(inputFocus, [CurrMessageInput]);
+		// useEffect(inputFocus, [CurrMessageInput]);
 
 
 		const geoFindMe = () => {
@@ -251,7 +251,7 @@ export default function Message({name}) {
 						value={newMessage}
 						onChange={event => setNewMessage(event.target.value)}
 						onKeyPress={event => addMessage(event, newMessage, setNewMessage)}
-						ref={CurrMessageInput}
+						// ref={CurrMessageInput}
 					/>
 					<div className={styles.add_button}>
 						<input

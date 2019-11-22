@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable func-names */
-/* eslint-disable no-alert */
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
@@ -8,7 +7,7 @@ import styles from '../styles/message.module.css';
 export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) {
 	const [recordState, setRecordState] = useState({});
 	const [preview, setPreview] = useState(true);
-	const [previewTimer, setPreviewTimer] = useState(false);
+	const [RecordOn, setRecordOn] = useState({backgroundColor: 'rgb(228, 228, 228)'});
 
 
 	useEffect(() => {
@@ -21,10 +20,10 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 					setRecordState({stream: mediaRecorder});
 				})
 				.catch(function(err) {
-					alert(err);
+					console.log(err);
 				});
 		} else {
-			alert('getUserMedia not supported on your browser!');
+			console.log('getUserMedia not supported on your browser!');
 		}
 	}, []);
 
@@ -87,18 +86,18 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 	
 	return (
 		<div>
-			<div className = {styles.audio_button}
+			<div className = {styles.audio_button} style={RecordOn}
 				role = 'button'
 				onClick={(event) => {
 					if (preview) {
 						StartRecord(event);
 						setPreview(!preview);
-						setPreviewTimer(!previewTimer);
+						setRecordOn({backgroundColor: 'rgb(250, 12, 60)'});
 					}
 					else {
 						StopRecord(event);
 						setPreview(!preview);
-						setPreviewTimer(!previewTimer);
+						setRecordOn({backgroundColor: 'rgb(228, 228, 228)'});
 					}
 				}}
 				onKeyPress={() => {}}

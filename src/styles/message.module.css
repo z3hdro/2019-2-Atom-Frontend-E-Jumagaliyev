@@ -215,29 +215,11 @@
   display: flex;
   justify-self: center;
   align-self: center;
-  padding: 0 0.5vh;
-}
-
-.audio_button_on {
-  flex: 0;
-  display: flex;
-  justify-self: center;
-  align-self: center;
-  border-radius: 50%;
-  background-color: rgb(255, 104, 104);
-  padding: 0 0.5vh;
+  padding: 0;
+  margin: 1vh 1vh;
 }
 
 .audio_button img {
   text-align: center;
   width: 5.5vh;
-}
-
-.timer {
-  position: absolute;
-  width: 10vh;
-  height: 5vh;
-  background-color: hsl(0, 100%, 50%);
-  bottom: 7vh;
-  right: 0;
 }
