@@ -74,7 +74,7 @@ export default function Message({name}) {
 
 
 		// const inputFocus = () => {
-		// 	CurrMessageInput.current.focus();
+		// CurrMessageInput.current.focus();
 		// };
 	
 		// useEffect(inputFocus, [CurrMessageInput]);
