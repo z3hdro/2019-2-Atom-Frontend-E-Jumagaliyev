@@ -16,9 +16,9 @@ export default function ChatList() {
 		setChats(JSON.parse(users));
 	}, []);
 
-	useEffect(() => {
-		localStorage.setItem('users', JSON.stringify(chats));
-	},[chats]);
+	// useEffect(() => {
+	// 	localStorage.setItem('users', JSON.stringify(chats));
+	// },[chats]);
 
 	const MenuList = ({visible}) => {
 		return (
@@ -116,9 +116,20 @@ export default function ChatList() {
 		}
 	};
 
-    
+	const sendToServer = (user) => {
+		fetch('http://127.0.0.1:8000/chats/createchat/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: user,
+		})
+			.then(result => console.log(result));
+	};
+	
 	const addUser = (event, user) => {
 		if (event.key === 'Enter') {
+			event.preventDefault();
 			if (user !== '') {
 				setChats([
 					...chats,
@@ -127,6 +138,7 @@ export default function ChatList() {
 						name: user
 					}
 				]);
+				sendToServer(user);
 			}
 		}
 	};

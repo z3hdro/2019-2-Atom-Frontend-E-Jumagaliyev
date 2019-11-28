@@ -80,7 +80,8 @@ export default function Message({name}) {
 		// useEffect(inputFocus, [CurrMessageInput]);
 
 
-		const geoFindMe = () => {
+		const geoFindMe = (event) => {
+			event.preventDefault();
 			const date = new Date();
 			const author = 'you';
 		
@@ -158,7 +159,7 @@ export default function Message({name}) {
 				<div className={styles.menulist}>
 					<div className={styles.option}
 						role = 'button'
-						onClick={() => geoFindMe(messages, setMessages)}
+						onClick={(event) => geoFindMe(event)}
 						onKeyPress={() => {}}
 						tabIndex = '0'>
 						<p>Местоположение</p>
