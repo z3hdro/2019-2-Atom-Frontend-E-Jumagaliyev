@@ -1,105 +1,83 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable func-names */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 
-export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) {
-	const [recordState, setRecordState] = useState({});
-	const [preview, setPreview] = useState(true);
-	const [RecordOn, setRecordOn] = useState({backgroundColor: 'rgb(228, 228, 228)'});
+export default function Record({id,chunks,setChunks}) {
+	const [recording, setRecording] = useState(null);
+	const [recorder, setRecorder] = useState(null);
 
 
-	useEffect(() => {
-		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			navigator.mediaDevices.getUserMedia (
-				{audio: true}
-			)
-				.then(function(stream) {
-					const mediaRecorder = new MediaRecorder(stream);
-					setRecordState({stream: mediaRecorder});
-				})
-				.catch(function(err) {
-					console.log(err);
-				});
-		} else {
-			console.log('getUserMedia not supported on your browser!');
+	async function fetchData() {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+			const mediaRecorder = new MediaRecorder(stream);
+			return mediaRecorder;
+		} catch(err) {
+			console.log(err);
+			return -1;
 		}
-	}, []);
+	}
 
-
-	const StartRecord = (e) => {
-		e.preventDefault();
+	const StartRecord = (record) => {
 		const parts = [];
-		setRecordState({
-			...recordState,
-			streamState: recordState.stream.start(10)
-		});
-		
-		console.log(recordState.stream.state);
+		const recordAudio = record;
+		recordAudio.start(10);
 		console.log('recorder started');
-		setRecordState({
-			...recordState,
-			data: recordState.stream.ondataavailable = (event) => {
-				parts.push(event.data);
-			}
-		});
+		recordAudio.ondataavailable = (event) => {
+			parts.push(event.data);
+		};
 		setChunks(parts);
+		setRecorder(recordAudio);
+		setRecording(true);
 	};
 	
 	
-	const StopRecord = (event) => {
-		event.preventDefault();
-		setRecordState({
-			...recordState,
-			streamState: recordState.stream.stop()
-		});
-		const date = new Date();
-		const author = 'you';
-		
-		console.log(recordState.stream.state);
+	const StopRecord = () => {
+		recorder.stop();
 		console.log('recorder stopped');
-		const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+		const blob = new Blob(chunks, { type: recorder.mimeType });
 		const data = new FormData();
-		data.append('audio', blob);
-		fetch('https://tt-front.now.sh/upload', {
+		data.append('chat_id', id);
+		data.append('content', '');
+		data.append('attachment_type', 'audio_message');
+		data.append('media', blob);
+		fetch('http://localhost:8000/message/createmessage/', {
 			method: 'POST',
+			headers: {
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			},
 			body: data,
-		}).then(function(response) {
-			console.log(response.status);
-			console.log(response);
-		});
-		const audioURL = window.URL.createObjectURL(blob);
-		setAudioMessage([
-			...audioMessage,
-			<div className={styles.chat_box_audio} key={audioURL}>
-				<span className={styles.msg}>{date.toTimeString().slice(0, 5)}</span>
-				<div className={styles.audio_record}>
-					<audio controls src={audioURL} />
-				</div>
-				<span className={styles.msg}>{author}</span>
-                        
-			</div>
-		]);
+		})
+			.then(result => {
+				console.log(result.status);
+				return result.json();
+			})
+			.catch(err => {
+				console.log(err.message);
+			});
+		setRecording(false);
+		setChunks([]);
 	};
 	
+	const recordHandler = (event) => {
+		event.preventDefault();
+		if (recording === null) {
+			fetchData().then((mediaRecorder) => StartRecord(mediaRecorder));
+		} else if (recording) {
+			StopRecord();
+		} else {
+			StartRecord(recorder);
+		}
+	};
 	
 	return (
 		<div>
-			<div className = {styles.audio_button} style={RecordOn}
+			<div className = {styles.audio_button}
 				role = 'button'
-				onClick={(event) => {
-					if (preview) {
-						StartRecord(event);
-						setPreview(!preview);
-						setRecordOn({backgroundColor: 'rgb(250, 12, 60)'});
-					}
-					else {
-						StopRecord(event);
-						setPreview(!preview);
-						setRecordOn({backgroundColor: 'rgb(228, 228, 228)'});
-					}
-				}}
+				onClick={(event) => recordHandler(event)}
+				style={recording ? {backgroundColor: 'rgb(250, 12, 60)'} : {backgroundColor: 'rgb(228, 228, 228)'}}
 				onKeyPress={() => {}}
 				tabIndex = '0'>
 				<img src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728712.png' alt='audioRecord'/>
@@ -111,10 +89,9 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 
 Record.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types
-	audioMessage : PropTypes.array.isRequired,
+	id : PropTypes.string.isRequired,
 	// eslint-disable-next-line react/forbid-prop-types
 	chunks: PropTypes.array.isRequired,
 	// eslint-disable-next-line react/no-unused-prop-types
-	setAudioMessage : PropTypes.func.isRequired,
 	setChunks: PropTypes.func.isRequired,
 };

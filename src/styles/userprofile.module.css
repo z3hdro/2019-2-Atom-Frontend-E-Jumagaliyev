@@ -4,6 +4,10 @@
   display: flex;
 }
 
+.photoAttach {
+  display: none;
+}
+
 .chat_header {
   padding-top: 1vh;
   padding-bottom: 1vh;

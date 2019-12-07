@@ -5,17 +5,54 @@ import styles from '../styles/userprofile.module.css';
 
 export default function UserProfile() {
 	const [data, setData] = useState({});
+	const [imageURL, setImageURL] = useState();
+	const [selectedFile, setSelectedFile] = useState();
+	const [preview, setPreview] = useState(false);
     
-	useEffect(() => {
-		if (localStorage.getItem('userinfo') !== null) {
-			const userinfo = localStorage.getItem('userinfo');
-			setData(JSON.parse(userinfo));
-		}
-		else{
-			localStorage.setItem('userinfo', JSON.stringify({fullname: '', username: '', biography: ''}));
-			setData({fullname: '', username: '', biography: ''});
-		}
-	}, []);
+	useEffect( () => {
+		fetch('http://localhost:8000/users/finduser/', {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			}
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(json => {
+				console.log(json.result);
+				setData(json.result);
+			});
+		return () => {
+			
+		};}, []);
+
+
+
+	const sendDatatoServer = () => {
+		const userData = new FormData();
+		
+		userData.append('first_name', data.first_name);
+		userData.append('last_name', data.last_name);
+		userData.append('bio', data.bio);
+		userData.append('avatar', selectedFile);
+		fetch('http://localhost:8000/users/updateuser/', {
+			method: 'POST',
+			headers: {
+				'Authorization': `Token ${localStorage.getItem('token')}`,
+			},
+			body: userData
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(json => {
+				console.log(json.success);
+			});
+		
+	};
+
+	
 
 	const UserPageHeader = () => {
 		return (
@@ -25,7 +62,7 @@ export default function UserProfile() {
 					onClick = {() => {}}
 					onKeyPress = {() => {}}
 					tabIndex = '0'>
-					<Link to='/'>
+					<Link to='/chatlist/'>
 						<img src='http://s1.iconbird.com/ico/2014/1/598/w128h1281390846445leftround128.png' alt='back' />
 					</Link>
 				</div>
@@ -33,7 +70,8 @@ export default function UserProfile() {
 				<div className={styles.saveBtn}
 					role = 'button'
 					onClick = {() => {
-						localStorage.setItem('userinfo', JSON.stringify(data));}
+						sendDatatoServer();
+					}
 					}
 					onKeyPress = {() => {}}
 					tabIndex = '0'>
@@ -67,54 +105,86 @@ export default function UserProfile() {
 					});
 				}
 			}
-			localStorage.setItem('userinfo', JSON.stringify(data));
+			
 		}
 	};
 
 	function UserPage() {
-		const [nameInfo, setNameInfo] = useState(data.fullname);
-		const [userInfo, setUserInfo] = useState(data.username);
-		const [BioInfo, setBioInfo] = useState(data.biography);
+		const [firstNameInfo, setFirstNameInfo] = useState(data.first_name);
+		const [lastNameInfo, setLastNameInfo] = useState(data.last_name);
+		const [BioInfo, setBioInfo] = useState(data.bio);
+		const fileInput = React.createRef();
+		// const [preview, setPreview] = useState(false);
+
+		const fileSelectedHandler = (files) => {
+			const file = files[0];
+			setSelectedFile(file); 
+			const fileURL = window.URL.createObjectURL(file);
+			console.log(fileURL);
+			setImageURL(fileURL);
+			setPreview(true);
+		};
+
+		function HandleClick() {
+			fileInput.current.click();
+		}
+
+		console.log(preview);
+
 		return (
 			<div className={styles.userpage}>
 				<div className={styles.avatar}>
-					<div className={styles.avatarPic}>
-						<img alt='User' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728710.png'/>
+					<input
+						className={styles.photoAttach}
+						type='file'
+						accept='image/jpeg,image/png'
+						onChange={(event) => fileSelectedHandler(event.target.files)}
+						ref={fileInput}/>
+					<div className={styles.avatarPic}
+						role = 'button'
+						onClick = {HandleClick}
+						onKeyPress = {() => {}}
+						tabIndex = '0'>
+						<img alt='User' src={ preview ? 
+							imageURL :
+							data.avatar
+						}
+						style={{width: '10vh', height: '10vh', borderRadius: '50%'}}/>
 					</div>
 				</div>
 				<div className={styles.fullname}>
-					<p className={styles.textholdernames}>Full name</p>
+					<p className={styles.textholdernames}>First name</p>
 					<textarea className={styles.textholder}
 						rows = '1' 
 						maxLength = '25'
-						value = {nameInfo}
-						onChange = {(event) => setNameInfo(event.target.value)}
-						onKeyPress = {(event) => SaveData(1, event, nameInfo.trim())}
+						value = {firstNameInfo}
+						onChange = {(event) => setFirstNameInfo(event.target.value)}
+						onKeyPress = {(event) => SaveData(1, event, firstNameInfo.trim())}
 						onBlur = {()=> {
 							setData({
 								...data,
-								fullname: nameInfo.trim()
+								first_name: firstNameInfo.trim()
 							});
 						}}/>
 				</div>
 				<div className={styles.username}>
-					<p className={styles.textholdernames}>Username</p>
+					<p className={styles.textholdernames}>Last Name</p>
 					<textarea className={styles.textholder}
 						rows = '1'
 						minLength = '5'
 						maxLength = '20'
-						value = {userInfo}
-						onChange = {(event) => setUserInfo(event.target.value)}
-						onKeyPress = {(event) => SaveData(2, event, userInfo.trim())}
+						value = {lastNameInfo}
+						onChange = {(event) => setLastNameInfo(event.target.value)}
+						onKeyPress = {(event) => SaveData(2, event, lastNameInfo.trim())}
 						onBlur = {() => {
 							setData({
 								...data,
-								username: userInfo.trim()
+								last_name: lastNameInfo.trim()
 							});
 						}}/>
 				</div>
 				<div className={styles.biography}>
-					<p className={styles.textholdernames}>Bio</p>
+					<p className={styles.textholdernames}>Biography</p>
 					<textarea className={styles.textholder}
 						rows = '4'
 						maxLength = '150'
@@ -124,7 +194,7 @@ export default function UserProfile() {
 						onBlur = {() => {
 							setData({
 								...data,
-								biography: BioInfo.trim()
+								bio: BioInfo.trim()
 							});
 						}}/>
 				</div>

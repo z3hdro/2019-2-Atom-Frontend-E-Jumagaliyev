@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-tabs */
+/* eslint-disable no-console */
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable no-alert */
 
 import React, {useState, useEffect, useRef} from 'react';
@@ -7,47 +11,125 @@ import styles from '../styles/message.module.css';
 import Record from './AudioRecord';
 
 
-
-export default function Message({name}) {
-	const [location, setLocation] = useState([]);
+export default function Message({id}) {
+	const [chatTopic, setChatTopic] = useState('');
 	const myRef = useRef(null);
 	const [messages, setMessages] = useState([]);
-	const [photoAttach, setPhotoAttach] = useState([]);
-	const [audioMessage, setAudioMessage] = useState([]);
+	const [visible, setVisible] = useState(false);
+	const [anyAttachment, setAnyAttachment] = useState([]);
+	const [newMessage, setNewMessage] = useState('');
+	const [attachments, setAttachments] = useState([]);
+	const [preview, setPreview] = useState(false);
+	const [imageURL, setImageURL] = useState([]);
+	const [selectedFile, setSelectedFile] = useState();
+	const [chunks, setChunks] = useState([]);
+	const [location, setLocation] = useState('');
+	const [author, setAuthor] = useState({you: [null, null] , other: [null,null]});
 	
+	const pollItems = () => {
+		fetch(`http://localhost:8000/message/showmessages/?chat_id=${id}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			}
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(json => {
+				console.log(json.result);
+				console.log(typeof(json.result));
+				if (json.result !== 'chat is empty') {
+					setMessages(json.result);
+					setAuthor({you: json.you , other: json.other});
+				}
+			});
+	};
+	
+	useEffect(() => {
+		const t = setInterval(() => pollItems(), 3000);
+		return () => clearInterval(t);
+	});
 
 	useEffect(() => {
-		const msg = localStorage.getItem(name) || '[]';
-		setMessages(JSON.parse(msg));
-	}, [name]);
+		fetch(`http://localhost:8000/chats/showchat/?chat_id=${id}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			}
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(json => {
+				setChatTopic(json.result);
+				
+			});
+	}, );
 
-
-	useEffect(() => {
-		localStorage.setItem(name, JSON.stringify(messages));
-	}, [messages, name]);
-
-
-	function MessageList(param) {
-		const data = [];
-		if (param.messages !== '[]') {
-			param.messages.map((message) =>
-				data.push(
-					<div className={styles.chat_box} key={message.id}>
-						<span className={styles.msg}>{message.time}</span>
-						<p className={styles.chat_text}>
-							{message.content}
-						</p>
-						<span className={styles.msg}>{message.author}</span>
+	const InsideContent = (message) => {
+		if (message.attachment_type === 'images') {
+			const picturesData = [];
+			message.attachment_url.map((pic) => 
+				picturesData.push(
+					<div key={pic}>
+						<img
+							className={styles.selected_pictures}
+							src={pic}
+							alt='img'/>
 					</div>
 				)
 			);
-			data.push(location);
+			return picturesData;
+		} 
+		if (message.attachment_type === 'geolocation') {
+			return (<a href = {message.attachment_url[0]}> Click on this message, it is my location </a>);
+		} 
+		if (message.attachment_type === 'audio_message') {
+			return (
+				<div className={styles.audio_record}>
+					<audio controls src={message.attachment_url[0]}/>
+				</div> );
+		} 
+		return (
+			<p className={styles.chat_text}>
+				{message.content}
+			</p>
+		);
+	};
+
+	function MessageList() {
+		const data = [];
+		if (messages.toString() !== '') {
+			messages.map((message) => {
+				data.push(
+					<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
+						style={(message.user_id === author.you[1]) ?
+							{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
+							{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
+						key={message.id}>
+						<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
+						{InsideContent(message)}
+						<span className={styles.msg}>
+							{(author.you[1] === message.user_id) ?
+								author.you[0] : 
+								author.other[0]}
+						</span>
+					</div>
+				);
+				return data;
+			});
 			return (
 				<div className={styles.result} ref = {myRef}> 
-					{data.concat(photoAttach, audioMessage)} 
+					{data} 
 				</div>
 			);
 		}
+		return (
+			<div className={styles.result} ref = {myRef}> 
+				{messages}
+			</div>
+		);
 	};
 
 
@@ -57,48 +139,29 @@ export default function Message({name}) {
 
 
 	useEffect(scrollToBottom, [messages]);
-	useEffect(scrollToBottom, [location]);
-	useEffect(scrollToBottom, [photoAttach]);
 
 
 	function InputMessage() {
-		const [visible, setVisible] = useState(false);
-		const [newMessage, setNewMessage] = useState('');
-		const [attachments, setAttachments] = useState([]);
-		const [preview, setPreview] = useState(false);
-		const [imageURL, setImageURL] = useState([]);
-		const [selectedFile, setSelectedFile] = useState();
-		const [chunks, setChunks] = useState([]);
-		// const CurrMessageInput = useRef(null);
+		
 		const fileInput = React.createRef();
+		const CurrMessageInput = useRef(null);
 
 
-		// const inputFocus = () => {
-		// CurrMessageInput.current.focus();
-		// };
+		const inputFocus = () => {
+			CurrMessageInput.current.focus();
+		};
 	
-		// useEffect(inputFocus, [CurrMessageInput]);
+		useEffect(inputFocus, [CurrMessageInput]);
 
 
 		const geoFindMe = (event) => {
 			event.preventDefault();
-			const date = new Date();
-			const author = 'you';
-		
 			function success(position) {
+				setAnyAttachment('geolocation');
 				const {latitude} = position.coords;
 				const {longitude} = position.coords;
-				const locationMessage = `your location is ${latitude}/${longitude}`;
-				setLocation([
-					...location,
-					<div className={styles.chat_box} key={location.length}>
-						<span className={styles.msg}>{date.toTimeString().slice(0, 5)}</span>
-						<p className={styles.chat_text}>
-							<a href = {`https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`}>{locationMessage}</a>
-						</p>
-						<span className={styles.msg}>{author}</span>
-					</div>
-				]);
+				setLocation(`https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`);
+				setNewMessage(`https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`);
 			}
 		
 			function error() {
@@ -118,6 +181,7 @@ export default function Message({name}) {
 				alert('LIMIT of 10 images');
 			} else {
 				setPreview(true);
+				setAnyAttachment('images');
 				const fileList = [];
 				const fileListURL = [];
 				setSelectedFile(files);
@@ -138,21 +202,9 @@ export default function Message({name}) {
 			}
 		};
 
-
-		function fileUploadHandler(files) {
-			const data = new FormData();
-			data.append('image', files);
-			fetch('https://tt-front.now.sh/upload', {
-				method: 'POST',
-				body: data,
-			});
-		};
-
-
 		function HandleClick() {
 			fileInput.current.click();
 		}
-
 
 		const MenuAttachment = () => {
 			return (
@@ -177,48 +229,54 @@ export default function Message({name}) {
 		};
 
 
+		const sendToServer = () => {
+			console.log(selectedFile);
+			const data = new FormData();
+			data.append('chat_id', id);
+			data.append('content', newMessage);
+			switch(anyAttachment) {
+				case 'images':
+					data.append('attachment_type', anyAttachment);
+					for (let i = 0; i < selectedFile.length; i+=1) {
+						data.append('media', selectedFile[i]);
+					}
+					break;
+				case 'geolocation':
+					data.append('attachment_type', anyAttachment);
+					data.append('geolocation_url', location);
+					break;
+				default:
+					data.append('attachment_type', null);
+			}
+			fetch('http://localhost:8000/message/createmessage/', {
+				method: 'POST',
+				headers: {
+					'Authorization': `Token ${localStorage.getItem('token')}`,
+				},
+				body: data,
+			})
+				.then(result => {
+					console.log(result);
+					return result.json();
+				})
+				.then(json => {
+					console.log(json);
+				});
+			setAnyAttachment(null);
+		};
+
 		const addMessage = (event) => {
 			if (event.key === 'Enter') {
-				const date = new Date();
-				const author = 'you';
-				if (newMessage.trim() !== '') {
-					setMessages([
-						...messages,
-						{
-							id: messages.length,
-							time: date.toTimeString().slice(0, 5),
-							content: newMessage,
-							author: 'you',
-						}
-					]);
+				if ((newMessage.trim() !== '') || (attachments.toString() !== '')) {
+					sendToServer();
 					setNewMessage('');
+					for (let i = 0; i < imageURL.length; i+=1) {
+						window.URL.revokeObjectURL(imageURL[i]);
+					}
+					setAttachments([]);
 				}
-				if (attachments !== '[]'){
-					const photoData = [];
-					attachments.map((picture, index) =>
-						photoData.push(
-							<div className={styles.chat_box} key={imageURL[index]}>
-								<span className={styles.msg}>{date.toTimeString().slice(0, 5)}</span>
-								<p className={styles.chat_text}>
-									{newMessage}
-								</p>
-								<div className={styles.chat_picture}>
-									<img 
-										alt='pic'
-										src={`${imageURL[index]}`}
-										onLoad = {() => {
-											window.URL.revokeObjectURL(imageURL[index]);
-										}}
-									/>
-								</div>
-								<span className={styles.msg}>{author}</span>
-							</div>
-						)
-					);
-					setPhotoAttach(photoData);
-					fileUploadHandler(selectedFile);
-				};
 				setPreview(!preview);
+				pollItems();
 			}
 		};
 
@@ -252,7 +310,7 @@ export default function Message({name}) {
 						value={newMessage}
 						onChange={event => setNewMessage(event.target.value)}
 						onKeyPress={event => addMessage(event, newMessage, setNewMessage)}
-						// ref={CurrMessageInput}
+						ref={CurrMessageInput}
 					/>
 					<div className={styles.add_button}>
 						<input
@@ -272,7 +330,7 @@ export default function Message({name}) {
 								src='http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911594add.png'/>
 						</div>
 					</div>
-					<Record audioMessage={audioMessage} setAudioMessage={setAudioMessage} chunks={chunks} setChunks={setChunks}/>
+					<Record id={id} chunks={chunks} setChunks={setChunks}/>
 				</div>
 			</div>
 		);
@@ -282,12 +340,12 @@ export default function Message({name}) {
 		<div>
 			<div className={styles.chat_header}>
 				<div className={styles.backimg}>
-					<Link to='/'>
+					<Link to='/chatlist/'>
 						<img className={styles.imgclick} 
 							src='http://s1.iconbird.com/ico/2014/1/598/w128h1281390846445leftround128.png' alt='back' />
 					</Link>
 				</div>
-				<p className={styles.header_chat}>{name}</p>
+				<p className={styles.header_chat}>{chatTopic}</p>
 			</div>
 			<MessageList messages = {messages} />
 			<InputMessage />
@@ -297,7 +355,7 @@ export default function Message({name}) {
 
 
 Message.propTypes = {
-	name : PropTypes.string.isRequired,
+	id : PropTypes.string.isRequired,
 	// eslint-disable-next-line react/no-unused-prop-types
 	visible : PropTypes.func.isRequired
 };
