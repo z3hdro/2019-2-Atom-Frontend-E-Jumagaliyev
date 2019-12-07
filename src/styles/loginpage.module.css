@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 
-.container button:hover {
+.container button:hover:focus {
   opacity: 0.8;
 }
 
@@ -41,7 +41,7 @@
   padding: 2vh 5vh;
   margin: 2vh 0;
   margin-left: 3vh;
-  display:inline-block;
+  display: inline-block;
   background-color: rgb(170, 170, 170);
   width: 10vh;
 }
@@ -49,5 +49,5 @@
 .links {
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
-  color: white;
+  color: rgb(255, 255, 255);
 }

@@ -3,18 +3,18 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as actions from '../actions/auth';
 import styles from '../styles/loginpage.module.css';
 
 
-function SignUpPage({history, onAuth}) {
+function SignUpPage({onAuth}) {
 	const [values, setValues] = useState({username: '', email: '', password1: '', password2: ''});
     
 	const sendData = event => {
 		event.preventDefault();
 		console.log(values);
 		onAuth(values.username, values.email, values.password1, values.password2);
-		console.log(history);
 		setValues({username: '', email: '', password1: '', password2: ''});
 	};
 
@@ -94,3 +94,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(null, mapDispatchToProps)(SignUpPage);
+
+SignUpPage.propTypes = {
+	onAuth : PropTypes.func.isRequired 
+};
