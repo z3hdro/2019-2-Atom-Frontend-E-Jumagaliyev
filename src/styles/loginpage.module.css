@@ -1,0 +1,53 @@
+.loginPageContainer {
+  padding-top: 10vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* .loginPageContainer form {
+  border-top: 1vw solid rgb(241, 241, 241);
+  border-bottom: 1vw solid rgb(241, 241, 241);
+} */
+
+/* input[type=text], input[type=password] */
+.container input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 1vh 0;
+  display: inline-block;
+  border: 0.5vh solid rgb(204, 204, 204);
+  box-sizing: border-box;
+}
+
+.Login {
+  background-color: rgb(170, 170, 170);
+  color: rgb(255, 255, 255);
+  padding: 2vh 5vh;
+  margin: 2vh 3vh 2vh 5vh;
+  font-size: 2vh;
+  border: none;
+  cursor: pointer;
+}
+
+.container button:hover {
+  opacity: 0.8;
+}
+
+.container {
+  padding: 16px;
+  font-size: 2vh;
+}
+
+.signUp {
+  padding: 2vh 5vh;
+  margin: 2vh 0;
+  margin-left: 3vh;
+  display:inline-block;
+  background-color: rgb(170, 170, 170);
+  width: 10vh;
+}
+
+.links {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  color: white;
+}

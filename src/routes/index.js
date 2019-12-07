@@ -51,34 +51,34 @@ function Routes({isAuthenticated, onTryAutoSignUp}) {
 		<Router history={history}>
 			<Switch>
 				<Route exact path='/'>
-					{(toggle !== null) ? <Redirect exact from = '/' to='/chatlist/' /> : <Redirect exact from = '/' to='/login/' />}
+					{(toggle !== null) ? <Redirect exact from = '/' to='/chatlist/' /> : <Redirect exact from = '/' to='/chatlist/' />}
 				</Route>
 				<Route exact path='/login/'>
-					{(toggle !== null) ? <Redirect exact from = '/login/' to='/chatlist/' /> : null }
+					{/* {(toggle !== null) ? <Redirect exact from = '/login/' to='/chatlist/' /> : null } */}
 					<LoginPage isAuthenticated = {isAuthenticated} />
 				</Route>
 				<Route exact path='/signup/'>
-					{(toggle !== null) ? <Redirect exact from = '/signup/' to='/chatlist/' /> : null }
+					{/* {(toggle !== null) ? <Redirect exact from = '/signup/' to='/chatlist/' /> : null } */}
 					<SignUpPage isAuthenticated = {isAuthenticated}/>
 				</Route>
 				<Route exact path='/profile/'>
-					{(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />}
+					{/* {(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />} */}
 					<UserProfile />
 				</Route>
 				<Route exact path='/message/:id/'>
-					{(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />}
+					{/* {(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />} */}
 					<Child />
 				</Route>
 				<Route exact path='/groupmessage/:id/'>
-					{(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />}
+					{/* {(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />} */}
 					<ChildGroup />
 				</Route>
 				<Route exact path='/support/'>
-					{(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />}
+					{/* {(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />} */}
 					<Support />
 				</Route>
 				<Route exact path='/chatlist/'>
-					{(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />}
+					{/* {(toggle !== null) ? null : <Redirect exact from = '/' to='/login/' />} */}
 					<ChatList />
 				</Route>
 			</Switch>

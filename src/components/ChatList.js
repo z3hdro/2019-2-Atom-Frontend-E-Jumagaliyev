@@ -268,6 +268,16 @@ function ChatList({logout}) {
 
 	useEffect(scrollToBottom, [chats]);
 
+	Contacts.propTypes = {
+		// eslint-disable-next-line react/forbid-prop-types
+		groupChatUsers : PropTypes.array.isRequired,
+		setGroupChatUsers : PropTypes.func.isRequired,
+		person : PropTypes.string.isRequired,
+		setPerson : PropTypes.func.isRequired,
+		isGroupChat : PropTypes.bool.isRequired,
+		setIsGroupChat : PropTypes.func.isRequired
+	};
+
 	return (
 		<div>
 			<ChatHeader />
@@ -276,18 +286,6 @@ function ChatList({logout}) {
 		</div>
 	);
 }
-
-
-ChatList.Contacts.propTypes = {
-	// eslint-disable-next-line react/no-unused-prop-types
-	// eslint-disable-next-line react/forbid-prop-types
-	groupChatUsers : PropTypes.array.isRequired,
-	setGroupChatUsers : PropTypes.func.isRequired,
-	person : PropTypes.string.isRequired,
-	setPerson : PropTypes.func.isRequired,
-	isGroupChat : PropTypes.bool.isRequired,
-	setIsGroupChat : PropTypes.func.isRequired
-};
 
 ChatList.propTypes = {
 	// eslint-disable-next-line react/no-unused-prop-types
