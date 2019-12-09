@@ -34,6 +34,9 @@ export default function ChatList() {
 				<div className={styles.linksCont}>
 					<Link className={styles.links} to='/profile'>Profile</Link>
 				</div>
+				<div className={styles.linksCont}>
+					<Link className={styles.links} to='/support'>Support</Link>
+				</div>
 			</div>
 		);
 	};
@@ -89,21 +92,23 @@ export default function ChatList() {
 	function UserList(param) {
 		if (param.names !== '[]') {
 			const data = param.names.map((user) =>
-				<div className={styles.user_box} key={user.id}>
-					<div className={styles.avatar}>
-						<img alt='User' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728710.png'/>
-					</div>
-					<div className={styles.chatContainer}>
-						<Link className={styles.links} to= {`/message/:${user.name}`} >
+				<Link className={styles.links} to= {`/message/:${user.name}`} key={user.id}>
+					<div className={styles.user_box} >
+						<div className={styles.avatar}>
+							<img alt='User' src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728710.png'/>
+						</div>
+					
+						<div className={styles.chatContainer}>
 							<p className={styles.chat_header}>{user.name}</p>
-						</Link>
-						<p className={styles.msg}>{lastMessage(user.name)}</p>
+							<p className={styles.msg}>{lastMessage(user.name)}</p>
+						</div>
+					
+						<div className={styles.indicatorCont}>
+							<span className={styles.time}>{lastMessageTime(user.name)}</span>
+							<img className={styles.indicator} alt='' src={checked(user.name)}/>
+						</div>
 					</div>
-					<div className={styles.indicatorCont}>
-						<span className={styles.time}>{lastMessageTime(user.name)}</span>
-						<img className={styles.indicator} alt='' src={checked(user.name)}/>
-					</div>
-				</div>
+				</Link>
 			);
 			return (
 				<div className={styles.messages} ref = {myRef}> {data} </div>

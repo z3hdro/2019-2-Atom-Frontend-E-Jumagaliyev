@@ -155,7 +155,7 @@ HEADER
   background-color: rgb(255, 255, 255);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   animation: slide 1s;
 }
 
@@ -172,7 +172,7 @@ HEADER
 
 .linksCont {
   padding: 0.5vh 1.5vw;
-  background-color: rgb(165, 164, 164);
+  background-color: rgb(231, 231, 231);
 }
 
 .links {

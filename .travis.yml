@@ -17,4 +17,4 @@ deploy:
     branch:
       - master
       - devel
-      - /^homework_\d+$/
+      - homework_07
