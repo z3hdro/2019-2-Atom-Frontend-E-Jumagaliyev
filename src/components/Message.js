@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 import Record from './AudioRecord';
-import API_URL from './config';
+import { API_URL } from './config';
 
 
 export default function Message({id}) {

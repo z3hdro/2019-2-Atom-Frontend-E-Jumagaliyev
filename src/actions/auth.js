@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import API_URL from '../components/config';
+import { API_URL } from '../components/config';
 
 export const authStart = () => {
 	return {

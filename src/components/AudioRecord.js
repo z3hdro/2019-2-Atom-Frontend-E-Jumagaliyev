@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
-import API_URL from './config';
+import { API_URL } from './config';
 
 export default function Record({id,chunks,setChunks}) {
 	const [recording, setRecording] = useState(null);
