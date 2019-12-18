@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 import Record from './AudioRecord';
+import API_URL from './config';
 
 
 export default function Message({id}) {
@@ -27,7 +28,7 @@ export default function Message({id}) {
 	const [author, setAuthor] = useState({you: [null, null] , other: [null,null]});
 	
 	const pollItems = () => {
-		fetch(`http://localhost:8000/message/showmessages/?chat_id=${id}`, {
+		fetch(`${API_URL}/message/showmessages/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -52,7 +53,7 @@ export default function Message({id}) {
 	});
 
 	useEffect(() => {
-		fetch(`http://localhost:8000/chats/showchat/?chat_id=${id}`, {
+		fetch(`${API_URL}/chats/showchat/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -99,26 +100,22 @@ export default function Message({id}) {
 	};
 
 	function MessageList() {
-		const data = [];
 		if (messages.toString() !== '') {
-			messages.map((message) => {
-				data.push(
-					<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
-						style={(message.user_id === author.you[1]) ?
-							{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
-							{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
-						key={message.id}>
-						<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
-						{InsideContent(message)}
-						<span className={styles.msg}>
-							{(author.you[1] === message.user_id) ?
-								author.you[0] : 
-								author.other[0]}
-						</span>
-					</div>
-				);
-				return data;
-			});
+			const data = messages.map((message) => 
+				<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
+					style={(message.user_id === author.you[1]) ?
+						{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
+						{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
+					key={message.id}>
+					<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
+					{InsideContent(message)}
+					<span className={styles.msg}>
+						{(author.you[1] === message.user_id) ?
+							author.you[0] : 
+							author.other[0]}
+					</span>
+				</div>
+			);
 			return (
 				<div className={styles.result} ref = {myRef}> 
 					{data} 
@@ -248,7 +245,7 @@ export default function Message({id}) {
 				default:
 					data.append('attachment_type', null);
 			}
-			fetch('http://localhost:8000/message/createmessage/', {
+			fetch(`${API_URL}/message/createmessage/`, {
 				method: 'POST',
 				headers: {
 					'Authorization': `Token ${localStorage.getItem('token')}`,

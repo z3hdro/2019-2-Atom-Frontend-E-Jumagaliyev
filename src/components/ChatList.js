@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../actions/auth';
 import styles from '../styles/chatlist.module.css';
+import API_URL from './config';
 
 
 
@@ -19,7 +20,7 @@ function ChatList({logout}) {
 
 
 	const pollItems = () => {
-		fetch('http://localhost:8000/chats/showchats/', {
+		fetch(`${API_URL}/chats/showchats/`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -45,7 +46,7 @@ function ChatList({logout}) {
 	useEffect(() => {
 		pollItems();
 
-		fetch('http://localhost:8000/users/showusers', {
+		fetch(`${API_URL}/users/showusers`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -97,7 +98,6 @@ function ChatList({logout}) {
 					<p>Messenger</p>
 				</div>
 				<div className={styles.finder_btn}>
-					{/* <img className={styles.findPic} src='http://s1.iconbird.com/ico/2013/1/569/w24h24138981479606magnify.png' alt='FindBtn'/> */}
 					<span className={styles.Login}
 						role = 'button'
 						onClick = {logout}
@@ -116,7 +116,7 @@ function ChatList({logout}) {
 				<Link className={styles.links} to= { user.is_group_chat ? `/groupmessage/:${user.id}/` : `/message/:${user.id}/`} key={`chat_${user.id}`}>
 					<div className={styles.user_box} >
 						<div className={styles.avatar}>
-							<img alt='User' src={user.avatar} style={{borderRadius:'50%', height: '6vh'}}/>
+							<img alt='User' src={user.avatar} style={{borderRadius: '50%', height: '6vh'}}/>
 						</div>
 					
 						<div className={styles.chatContainer}>
@@ -147,9 +147,6 @@ function ChatList({logout}) {
 
 	const sendToServer = (user, person, groupChatUsers, isGroupChat) => {
 		const myset = new Set(groupChatUsers);
-		console.log(myset);
-		// console.log(typeof(user));
-		console.log(user);
 		const data = new FormData();
 		data.append('is_group_chat', isGroupChat);
 		data.append('topic', user);
@@ -159,7 +156,7 @@ function ChatList({logout}) {
 		if (isGroupChat === true) {
 			for (const value of myset) data.append('username', value);
 		}
-		fetch('http://localhost:8000/chats/createchat/', {
+		fetch(`${API_URL}/chats/createchat/`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -167,7 +164,6 @@ function ChatList({logout}) {
 			body: data,
 		})
 			.then(result => {
-				// console.log(result);
 				return result.json();
 			})
 			.then(json => {
@@ -180,7 +176,6 @@ function ChatList({logout}) {
 			if (user !== '') {
 				sendToServer(user, person, groupChatUsers, isGroupChat);
 				setUser('');
-				// window.location.reload();
 			}
 		}
 	};

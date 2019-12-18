@@ -3,6 +3,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
+import API_URL from './config';
 
 export default function Record({id,chunks,setChunks}) {
 	const [recording, setRecording] = useState(null);
@@ -43,7 +44,7 @@ export default function Record({id,chunks,setChunks}) {
 		data.append('content', '');
 		data.append('attachment_type', 'audio_message');
 		data.append('media', blob);
-		fetch('http://localhost:8000/message/createmessage/', {
+		fetch(`${API_URL}/message/createmessage/`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Token ${localStorage.getItem('token')}`

@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import API_URL from '../components/config';
 
 export const authStart = () => {
 	return {
@@ -45,7 +46,7 @@ export const authLogin = (username, password) => {
 			'password': password
 		};
 
-		fetch('http://localhost:8000/rest-auth/login/', {
+		fetch(`${API_URL}/rest-auth/login/`, {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -78,24 +79,6 @@ export const authLogin = (username, password) => {
 export const authSignup = (username, email, password1, password2) => {
 	return dispatch => {
 		dispatch(authStart());
-		// axios.post('http://127.0.0.1:8000/rest-auth/registration/', {
-		//     username: username,
-		//     email: email,
-		//     password1: password1,
-		//     password2: password2,
-		// })
-		// .then(res => {
-		//     const token = res.data.key;
-		//     //expiration time for 1 hour
-		//     const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-		//     localStorage.setItem('token', token);
-		//     localStorage.setItem('expirationDate', expirationDate);
-		//     dispatch(authSuccess(token));
-		//     checkAuthTimeout();
-		// })
-		// .catch(err => {
-		//     dispatch(authFail(err))
-		// })
 		const data = {
 			'username':username,
 			'email':email,
@@ -103,7 +86,7 @@ export const authSignup = (username, email, password1, password2) => {
 			'password2':password2,
 		};
 
-		fetch('http://localhost:8000/rest-auth/registration/', {
+		fetch(`${API_URL}/rest-auth/registration/`, {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -111,7 +94,6 @@ export const authSignup = (username, email, password1, password2) => {
 			},
 			body: JSON.stringify(data),
 		})
-		// .then(result => console.log(result));
 			.then(res => {
 				if (!res.ok) throw res;
 				return res.json();})

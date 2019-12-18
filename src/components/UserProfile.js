@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../styles/userprofile.module.css';
+import API_URL from './config';
 
 
 export default function UserProfile() {
@@ -10,7 +11,7 @@ export default function UserProfile() {
 	const [preview, setPreview] = useState(false);
     
 	useEffect( () => {
-		fetch('http://localhost:8000/users/finduser/', {
+		fetch(`${API_URL}/users/finduser/`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -36,7 +37,7 @@ export default function UserProfile() {
 		userData.append('last_name', data.last_name);
 		userData.append('bio', data.bio);
 		userData.append('avatar', selectedFile);
-		fetch('http://localhost:8000/users/updateuser/', {
+		fetch(`${API_URL}/users/updateuser/`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Token ${localStorage.getItem('token')}`,
@@ -114,13 +115,11 @@ export default function UserProfile() {
 		const [lastNameInfo, setLastNameInfo] = useState(data.last_name);
 		const [BioInfo, setBioInfo] = useState(data.bio);
 		const fileInput = React.createRef();
-		// const [preview, setPreview] = useState(false);
 
 		const fileSelectedHandler = (files) => {
 			const file = files[0];
 			setSelectedFile(file); 
 			const fileURL = window.URL.createObjectURL(file);
-			console.log(fileURL);
 			setImageURL(fileURL);
 			setPreview(true);
 		};
@@ -129,7 +128,6 @@ export default function UserProfile() {
 			fileInput.current.click();
 		}
 
-		console.log(preview);
 
 		return (
 			<div className={styles.userpage}>

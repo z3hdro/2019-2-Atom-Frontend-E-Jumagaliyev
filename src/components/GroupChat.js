@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
 import Record from './AudioRecord';
+import API_URL from './config';
 
 
 export default function GroupMessage({id}) {
@@ -27,7 +28,7 @@ export default function GroupMessage({id}) {
 	const [location, setLocation] = useState('');
 	
 	const pollItems = () => {
-		fetch(`http://localhost:8000/message/showgroupmessages/?chat_id=${id}`, {
+		fetch(`${API_URL}/message/showgroupmessages/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -51,7 +52,7 @@ export default function GroupMessage({id}) {
 	});
 
 	useEffect(() => {
-		fetch('http://localhost:8000/users/findme/', {
+		fetch(`${API_URL}/users/findme/`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -65,7 +66,7 @@ export default function GroupMessage({id}) {
 				setMyID(json.result);
 			});
 
-		fetch(`http://localhost:8000/chats/showchat/?chat_id=${id}`, {
+		fetch(`${API_URL}/chats/showchat/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -82,18 +83,14 @@ export default function GroupMessage({id}) {
 
 	const InsideContent = (message) => {
 		if (message.attachment_type === 'images') {
-			const picturesData = [];
-			message.attachment_url.map((pic) => 
-				picturesData.push(
-					<div key={pic}>
-						<img
-							className={styles.selected_pictures}
-							src={pic}
-							alt='img'/>
-					</div>
-				)
+			return message.attachment_url.map((pic, idx) => 
+				<div key={pic}>
+					<img
+						className={styles.selected_pictures}
+						src={pic}
+						alt='img'/>
+				</div>
 			);
-			return picturesData;
 		} 
 		if (message.attachment_type === 'geolocation') {
 			return (<a href = {message.attachment_url[0]}> Click on this message, it is my location </a>);
@@ -112,24 +109,20 @@ export default function GroupMessage({id}) {
 	};
 
 	function MessageList() {
-		const data = [];
 		if (messages.toString() !== '') {
-			messages.map((message) => {
-				data.push(
-					<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
-						style={(message.user_id === myID) ?
-							{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
-							{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
-						key={message.id}>
-						<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
-						{InsideContent(message)}
-						<span className={styles.msg}>
-							{message.username}
-						</span>
-					</div>
-				);
-				return data;
-			});
+			const data = messages.map((message) => 
+				<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
+					style={(message.user_id === myID) ?
+						{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
+						{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
+					key={message.id}>
+					<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
+					{InsideContent(message)}
+					<span className={styles.msg}>
+						{message.username}
+					</span>
+				</div>
+			);
 			return (
 				<div className={styles.result} ref = {myRef}> 
 					{data} 
@@ -196,18 +189,30 @@ export default function GroupMessage({id}) {
 				const fileList = [];
 				const fileListURL = [];
 				setSelectedFile(files);
-				for (let i = 0; i < files.length; i+=1) {
-					const fileURL = window.URL.createObjectURL(files[i]);
+				// for (let i = 0; i < files.length; i+=1) {
+				// 	const fileURL = window.URL.createObjectURL(files[i]);
+				// 	fileListURL.push(fileURL);
+				// 	fileList.push(
+				// 		<div key={i}>
+				// 			<img
+				// 				className={styles.selected_pictures}
+				// 				src={fileURL}
+				// 				alt='img'/>
+				// 		</div>
+				// 	);
+				// };
+				files.forEach(file => {
+					const fileURL = window.URL.createObjectURL(file);
 					fileListURL.push(fileURL);
 					fileList.push(
-						<div key={i}>
+						<div key={file}>
 							<img
 								className={styles.selected_pictures}
 								src={fileURL}
 								alt='img'/>
 						</div>
 					);
-				};
+				});
 				setAttachments(fileList);
 				setImageURL(fileListURL);
 			}
@@ -259,7 +264,7 @@ export default function GroupMessage({id}) {
 				default:
 					data.append('attachment_type', null);
 			}
-			fetch('http://localhost:8000/message/createmessage/', {
+			fetch(`${API_URL}/message/createmessage/`, {
 				method: 'POST',
 				headers: {
 					'Authorization': `Token ${localStorage.getItem('token')}`,

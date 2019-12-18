@@ -14,9 +14,7 @@ function LoginPage({ onAuth}) {
     
 	const sendData = event => {
 		event.preventDefault();
-		console.log(values);
 		onAuth(values.username, values.password);
-		// console.log(history);
 		setValues({username: '',password: ''});
 	};
 
