@@ -4,6 +4,7 @@ export default function SelectedForecast({id}) {
     console.log(id);
 
     const [forecast, setForecast] = useState([]);
+    
     useEffect(() => {
         fetch(`https://api.openweathermap.org/data/2.5/group?id=${id}&units=metric&appid=b9af20ffd3ba40ecb7a0755286c703bc`)
 			.then(res => res.json())

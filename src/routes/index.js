@@ -26,8 +26,8 @@ function Routes() {
 				<Route path='/profile'>
 					<UserProfile />
 				</Route>
-				<Route path='/message/:id'>
-					<Child />
+				<Route path='/message/:id' component={Child}>
+					{/* <Child /> */}
 				</Route>
 				<Route path='/'>
 					<ChatList />
