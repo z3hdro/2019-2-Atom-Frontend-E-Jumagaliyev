@@ -1,0 +1,70 @@
+.Header {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(207, 207, 207);
+}
+
+.HeaderText {
+    font-size: 3vh;
+}
+
+.HeaderBtn {
+    
+}
+
+.Btn {
+  width: 6vh;
+  border-radius: 50%; 
+  background-color: rgba(84, 84, 255, 0.686);
+  position: fixed;
+  bottom: 5vh;
+  right: 5vh;
+}
+
+.Result {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.ForecastBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 5%;
+  width: 90%;
+  height: 12vh;
+  background-color: rgb(218, 247, 248);
+}
+
+.links {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+.TopBox {
+  display: flex;
+  justify-content: space-around;
+}
+
+.CityName {
+  font-size: 3vh;
+}
+
+.Temp {
+  font-size: 3vh;
+}
+
+.BottomBox {
+  border-top: solid 0.5vh gray;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.ExtendInfo {
+  
+}
