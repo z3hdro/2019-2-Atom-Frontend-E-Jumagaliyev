@@ -51,12 +51,36 @@
   transition: background-color 1s;
 }
 
+.chat_box_audio {
+  background-color: rgb(173, 216, 230);
+  border-radius: 1.5vh;
+  width: auto;
+  padding: 1vh;
+  margin-bottom: 1vh;
+  max-width: 38vh;
+  transition: background-color 1s;
+}
+
+.audio_record {
+  margin-top: 0.5vh;
+  padding: 0;
+}
+
+.audio_record audio {
+  width: 33vh;
+  height: 5vh;
+}
+
 .chat_box:hover:focus {
   background-color: rgb(0, 181, 228);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .chat_box {
+    transition: none;
+  }
+
+  .chat_box_audio {
     transition: none;
   }
 }
@@ -76,16 +100,126 @@
   line-height: 4vh;
 }
 
-input {
-  border: 0;
-  border-top: 5px solid rgb(192, 192, 192);
-  outline: none;
+.chat_picture img {
+  width: 25vh;
+  height: 25vh;
+}
+
+.input_container {
+  background-color: rgb(228, 228, 228);
   width: 100%;
-  height: 0.5vh;
-  font-size: 3vh;
-  padding: 3vh 2vh;
-  margin: 0;
+  border-top: 0.5vh solid rgb(192, 192, 192);
   position: fixed;
   bottom: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.attachment_block {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1vh;
+  grid-auto-rows: auto;
+}
+
+.attachment_audio_block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input_block {
+  display: flex;
+  flex-direction: row;
+}
+
+.selected_pictures {
+  height: 10vh;
+  width: 10vh;
+}
+
+.message_menu {
+  flex: 0;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  padding: 0 1vh;
+}
+
+.message_menu img {
+  width: 4vh;
+}
+
+.menulist {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  height: auto;
+  width: auto;
+  border-radius: 1vh;
+  background-color: rgb(243, 243, 243);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  animation: slide 0.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menulist {
+    animation: none;
+  }
+}
+
+@keyframes slide {
+  0% { transform: translate(0, 110vh); }
+  100% { transform: translate(0, 0); }
+}
+
+.closeMenuBtn {
+  align-self: center;
+}
+
+.option {
+  background-color: rgb(231, 231, 231);
+}
+
+.input_container input {
+  flex: 2;
+  border-radius: 4vh;
+  outline: none;
+  width: 100%;
+  height: auto;
+  font-size: 3vh;
+  padding: 0 2vh;
+  margin: 0;
+}
+
+.photoAttach {
+  display: none;
+}
+
+.picAttach img {
+  width: 4vh;
+}
+
+.add_button {
+  flex: 0;
+  align-self: center;
+  padding: 1vh 0 1vh 1vh;
+}
+
+.audio_button {
+  border-radius: 50%;
+  flex: 0;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  padding: 0;
+  margin: 1vh 1vh;
+}
+
+.audio_button img {
+  text-align: center;
+  width: 5.5vh;
 }
