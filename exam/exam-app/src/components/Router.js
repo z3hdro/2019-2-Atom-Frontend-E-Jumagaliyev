@@ -26,7 +26,7 @@ function Routes() {
 				<Route exact path='/'>
 					<MainForecast />
 				</Route>
-				<Route path='/:id'>
+				<Route path='/:id/'>
 					<Child />
 				</Route>
 			</Switch>

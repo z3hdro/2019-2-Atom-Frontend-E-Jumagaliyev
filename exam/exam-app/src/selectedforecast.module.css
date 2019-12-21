@@ -1,0 +1,60 @@
+.page {
+  background-color: rgb(107, 168, 192);
+}
+
+.Header {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+.backImg {
+  flex: 0;
+  margin-right: 3vh;
+  margin-left: 2vh;
+}
+
+.backImg img {
+    width: 4vh;
+}
+
+.cityName {
+  flex: 1;
+  font-size: 5vh;
+  text-align: center;
+}
+
+.links {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.mainpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+}
+.maininfo {
+    font-size: 18vh;
+    margin-bottom: 4vh;
+}
+
+.extrainfo {
+  text-align: center;
+  width: 90%;
+  border-top: 0.2vh solid rgb(184, 184, 184);
+  font-size: 3vh;
+  margin-bottom: 1vh;
+}
+
+.extrainfo span {
+  display: block;
+}
+
+.description {
+  font-size: 2vh;
+  color: rgb(233, 232, 232);
+}

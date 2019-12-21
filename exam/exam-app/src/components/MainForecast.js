@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Link} from 'react-router-dom';
 import styles from '../mainforecast.module.css';
 
@@ -17,38 +17,15 @@ export default function MainForecast() {
         462352,
         2267057,
     ])
-    //     },
-    //     {
-    //         "id": 745042,
-    //         "name": "İstanbul",
-    //         "country": "TR",
-    //         "coord": {
-    //           "lon": 28.983311,
-    //           "lat": 41.03508
-    //         }
-    //     },
-    //     {
-    //         "id": 874652,
-    //         "name": "Orekhovo",
-    //         "country": "GE",
-    //         "coord": {
-    //           "lon": 40.146111,
-    //           "lat": 43.351391
-    //         }
-    //     },
-    //     {
-    //         "id": 569143,
-    //         "name": "Cherkizovo",
-    //         "country": "RU",
-    //         "coord": {
-    //           "lon": 37.728889,
-    //           "lat": 55.800835
-    //         }
-    //     }
-    // ])
-
+    const myRef = useRef(null);
     const [forecasts, setForecasts] = useState([]);
+    const [toggle, setToggle] = useState(false);
 
+    const scrollToBottom = () => {
+		myRef.current.scrollIntoView({ behavior: 'smooth', block: 'end'});
+	};
+
+	useEffect(scrollToBottom, [special]);
 
     useEffect(() => {
         const city_id = special.join();
@@ -59,19 +36,22 @@ export default function MainForecast() {
                 setForecasts(json.list);
                 return json
             })
-        }, []);
+        }, [special]);
 
+
+    const WeatherPicture = (icon) => `http://openweathermap.org/img/wn/${icon}@2x.png`
 
     const ForecastResult = () => {
         const data = forecasts.map((city) => 
-        <Link className={styles.links} to = {`/:${city.id}/`} key={city.id}>
+        <Link className={styles.links} to = {`/${city.name}/`} key={city.id}>
             <div className={styles.ForecastBox}>
                 <div className={styles.TopBox}>
                     <div className={styles.CityName}>
                         {city.name}
                     </div>
                     <div className={styles.Temp}>
-                        {city.main.temp}
+                        <img alt='weather' src={WeatherPicture(city.weather[0].icon)}/>
+                        {Math.round(city.main.temp)}<sup> o</sup>C
                     </div>
                 </div>
                 <div className={styles.BottomBox}>
@@ -79,7 +59,7 @@ export default function MainForecast() {
                         {`Humidity ${city.main.humidity} | ${city.wind.speed} m/s`}
                     </div>
                     <div className={styles.MaxMinTemp}>
-                        {`${city.main.temp_max}/${city.main.temp_min} *С`}
+                        {Math.round(city.main.temp_max)}<sup> o</sup>C/{Math.round(city.main.temp_min)}<sup> o</sup>C
                     </div>
                 </div>
             </div>
@@ -87,7 +67,7 @@ export default function MainForecast() {
         );
         
         return (
-            <div className={styles.Result}>
+            <div className={styles.Result} ref = {myRef}>
                 {data}
             </div>
         )
@@ -104,25 +84,50 @@ export default function MainForecast() {
         )
     }
 
-    const Btn = () => {
-        return (
+    const addUser = (event, city) => {
+		if (event.key === 'Enter') {
+			if (city !== '') {
+                fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=b9af20ffd3ba40ecb7a0755286c703bc`)
+                    .then(res => res.json())
+                    .then(json => {
+                        console.log(json);
+                        setSpecial([
+                            ...special,
+                            json.id
+                        ])
+            })
+			}
+		}
+	};
+
+    const CreateInput = () => {
+		const [newcity, setNewCity] = useState('');
+		return (
+			<input
+				className = {styles.create_chat}
+				type='text'
+				value={newcity}
+				onChange={(event) => setNewCity(event.target.value)}
+				onKeyPress={(event) => {addUser(event, newcity.trim());}}
+			/>
+		); 
+    };
+    
+    return (
+        <div className={styles.main}>
+            <HeaderForecast />
             <div>
-                <HeaderForecast />
-                <div>
-                    <ForecastResult />
-                </div>
-                <div className={styles.Btn}>
-                    <p>
-                        Button
-                    </p>
-                </div>
-            </div>  
+                <ForecastResult />
+            </div>
+            <div className={styles.Btn}
+                role = 'button'
+                onClick = {() => {
+                    setToggle(!toggle)}}
+                onKeyPress = {() => {}}
+                tabIndex = '0'>
+                <img alt='add' src='https://image.flaticon.com/icons/png/512/149/149156.png'/>
+            </div>
+            {toggle ? <CreateInput /> : null}
+        </div>  
         )
     }
-
-    return (
-        <div>
-            <Btn />
-        </div>
-    )
-}
