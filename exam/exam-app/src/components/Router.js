@@ -15,7 +15,7 @@ export const history = createBrowserHistory();
 function Child() {
 	const { id } = useParams();
 	return (
-		<SelectedForecast id = {id}/>
+		<SelectedForecast name = {id}/>
 	);
 }
 
@@ -26,7 +26,7 @@ function Routes() {
 				<Route exact path='/'>
 					<MainForecast />
 				</Route>
-				<Route path='/:id'>
+				<Route path='/:id/'>
 					<Child />
 				</Route>
 			</Switch>
