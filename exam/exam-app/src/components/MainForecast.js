@@ -27,7 +27,7 @@ export default function MainForecast() {
 
 	useEffect(scrollToBottom, [special]);
 
-    useEffect(() => {
+  useEffect(() => {
         const city_id = special.join();
         fetch(`https://api.openweathermap.org/data/2.5/group?id=${city_id}&units=metric&appid=b9af20ffd3ba40ecb7a0755286c703bc`)
 			.then(res => res.json())
