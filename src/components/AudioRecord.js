@@ -35,6 +35,7 @@ export default function Record({id,chunks,setChunks}) {
 	};
 	
 	
+	
 	const StopRecord = () => {
 		recorder.stop();
 		console.log('recorder stopped');
