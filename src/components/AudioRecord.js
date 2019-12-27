@@ -3,8 +3,9 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/message.module.css';
+import { API_URL } from './config';
 
-export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) {
+export default function Record({id,chunks,setChunks}) {
 	const [recording, setRecording] = useState(null);
 	const [recorder, setRecorder] = useState(null);
 
@@ -20,7 +21,6 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 		}
 	}
 
-
 	const StartRecord = (record) => {
 		const parts = [];
 		const recordAudio = record;
@@ -34,34 +34,31 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 		setRecording(true);
 	};
 	
-	
 	const StopRecord = () => {
 		recorder.stop();
-		const date = new Date();
-		const author = 'you';
 		console.log('recorder stopped');
-		const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+		const blob = new Blob(chunks, { type: recorder.mimeType });
 		const data = new FormData();
-		data.append('audio', blob);
-		fetch('https://tt-front.now.sh/upload', {
+		data.append('chat_id', id);
+		data.append('content', '');
+		data.append('attachment_type', 'audio_message');
+		data.append('media', blob);
+		fetch(`${API_URL}/message/createmessage/`, {
 			method: 'POST',
+			headers: {
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			},
 			body: data,
-		}).then(function(response) {
-			console.log(response.status);
-			console.log(response);
-		});
-		const audioURL = window.URL.createObjectURL(blob);
-		setAudioMessage([
-			...audioMessage,
-			<div className={styles.chat_box_audio} key={audioURL}>
-				<span className={styles.msg}>{date.toTimeString().slice(0, 5)}</span>
-				<div className={styles.audio_record}>
-					<audio controls src={audioURL} />
-				</div>
-				<span className={styles.msg}>{author}</span>
-                        
-			</div>
-		]);
+		})
+			.then(result => {
+				console.log(result.status);
+				return result.json();
+			})
+			.catch(err => {
+				console.log(err.message);
+			});
+		setRecording(false);
+		setChunks([]);
 	};
 	
 	const recordHandler = (event) => {
@@ -77,9 +74,10 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 	
 	return (
 		<div>
-			<div className = {styles.audio_button} style={recording ? {backgroundColor: 'rgb(250, 12, 60)'} : {backgroundColor: 'rgb(228, 228, 228)'}}
+			<div className = {styles.audio_button}
 				role = 'button'
 				onClick={(event) => recordHandler(event)}
+				style={recording ? {backgroundColor: 'rgb(250, 12, 60)'} : {backgroundColor: 'rgb(228, 228, 228)'}}
 				onKeyPress={() => {}}
 				tabIndex = '0'>
 				<img src='http://s1.iconbird.com/ico/2013/3/636/w80h80139396728712.png' alt='audioRecord'/>
@@ -91,10 +89,9 @@ export default function Record({audioMessage,setAudioMessage,chunks,setChunks}) 
 
 Record.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types
-	audioMessage : PropTypes.array.isRequired,
+	id : PropTypes.string.isRequired,
 	// eslint-disable-next-line react/forbid-prop-types
 	chunks: PropTypes.array.isRequired,
 	// eslint-disable-next-line react/no-unused-prop-types
-	setAudioMessage : PropTypes.func.isRequired,
 	setChunks: PropTypes.func.isRequired,
 };

@@ -12,7 +12,7 @@ import Record from './AudioRecord';
 import { API_URL } from './config';
 
 
-export default function Message({id}) {
+export default function GroupMessage({id}) {
 	const [chatTopic, setChatTopic] = useState('');
 	const myRef = useRef(null);
 	const [messages, setMessages] = useState([]);
@@ -24,11 +24,11 @@ export default function Message({id}) {
 	const [imageURL, setImageURL] = useState([]);
 	const [selectedFile, setSelectedFile] = useState();
 	const [chunks, setChunks] = useState([]);
+	const [myID, setMyID] = useState();
 	const [location, setLocation] = useState('');
-	const [author, setAuthor] = useState({you: [null, null] , other: [null,null]});
 	
 	const pollItems = () => {
-		fetch(`${API_URL}/message/showmessages/?chat_id=${id}`, {
+		fetch(`${API_URL}/message/showgroupmessages/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Token ${localStorage.getItem('token')}`
@@ -42,7 +42,6 @@ export default function Message({id}) {
 				console.log(typeof(json.result));
 				if (json.result !== 'chat is empty') {
 					setMessages(json.result);
-					setAuthor({you: json.you , other: json.other});
 				}
 			});
 	};
@@ -53,6 +52,20 @@ export default function Message({id}) {
 	});
 
 	useEffect(() => {
+		fetch(`${API_URL}/users/findme/`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Token ${localStorage.getItem('token')}`
+			}
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(json => {
+				console.log(json.result);
+				setMyID(json.result);
+			});
+
 		fetch(`${API_URL}/chats/showchat/?chat_id=${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -70,18 +83,14 @@ export default function Message({id}) {
 
 	const InsideContent = (message) => {
 		if (message.attachment_type === 'images') {
-			const picturesData = [];
-			message.attachment_url.map((pic) => 
-				picturesData.push(
-					<div key={pic}>
-						<img
-							className={styles.selected_pictures}
-							src={pic}
-							alt='img'/>
-					</div>
-				)
+			return message.attachment_url.map((pic, idx) => 
+				<div key={pic}>
+					<img
+						className={styles.selected_pictures}
+						src={pic}
+						alt='img'/>
+				</div>
 			);
-			return picturesData;
 		} 
 		if (message.attachment_type === 'geolocation') {
 			return (<a href = {message.attachment_url[0]}> Click on this message, it is my location </a>);
@@ -103,16 +112,14 @@ export default function Message({id}) {
 		if (messages.toString() !== '') {
 			const data = messages.map((message) => 
 				<div className={(message.attachment_type === 'audio_message') ? styles.chat_box_audio : styles.chat_box_me}
-					style={(message.user_id === author.you[1]) ?
+					style={(message.user_id === myID) ?
 						{backgroundColor: 'rgb(173, 216, 230)', alignSelf: 'flex-end'} :
 						{backgroundColor: 'rgb(200, 200, 200)', alignSelf: 'flex-start'}}
 					key={message.id}>
 					<span className={styles.msg}>{new Date(message.added_at).toTimeString().slice(0,5)}</span>
 					{InsideContent(message)}
 					<span className={styles.msg}>
-						{(author.you[1] === message.user_id) ?
-							author.you[0] : 
-							author.other[0]}
+						{message.username}
 					</span>
 				</div>
 			);
@@ -182,18 +189,30 @@ export default function Message({id}) {
 				const fileList = [];
 				const fileListURL = [];
 				setSelectedFile(files);
-				for (let i = 0; i < files.length; i+=1) {
-					const fileURL = window.URL.createObjectURL(files[i]);
+				// for (let i = 0; i < files.length; i+=1) {
+				// 	const fileURL = window.URL.createObjectURL(files[i]);
+				// 	fileListURL.push(fileURL);
+				// 	fileList.push(
+				// 		<div key={i}>
+				// 			<img
+				// 				className={styles.selected_pictures}
+				// 				src={fileURL}
+				// 				alt='img'/>
+				// 		</div>
+				// 	);
+				// };
+				files.forEach(file => {
+					const fileURL = window.URL.createObjectURL(file);
 					fileListURL.push(fileURL);
 					fileList.push(
-						<div key={i}>
+						<div key={file}>
 							<img
 								className={styles.selected_pictures}
 								src={fileURL}
 								alt='img'/>
 						</div>
 					);
-				};
+				});
 				setAttachments(fileList);
 				setImageURL(fileListURL);
 			}
@@ -351,7 +370,7 @@ export default function Message({id}) {
 }
 
 
-Message.propTypes = {
+GroupMessage.propTypes = {
 	id : PropTypes.string.isRequired,
 	// eslint-disable-next-line react/no-unused-prop-types
 	visible : PropTypes.func.isRequired

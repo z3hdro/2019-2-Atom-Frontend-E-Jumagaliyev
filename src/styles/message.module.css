@@ -29,19 +29,16 @@
   background-color: rgb(235, 221, 221);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  padding-right: 2vh;
-  padding-top: 2vh;
+  padding: 2vh 2vh 7vh 2vh;
   overflow: hidden;
   margin-top: 6vh;
-  padding-bottom: 7vh;
 }
 
 .imgclick {
   width: 6vh;
 }
 
-.chat_box {
+.chat_box_me {
   background-color: rgb(173, 216, 230);
   border-radius: 1.5vh;
   width: auto;
@@ -76,7 +73,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chat_box {
+  .chat_box_me {
     transition: none;
   }
 
@@ -135,8 +132,8 @@
 }
 
 .selected_pictures {
-  height: 10vh;
-  width: 10vh;
+  height: 18vh;
+  width: 24vh;
 }
 
 .message_menu {

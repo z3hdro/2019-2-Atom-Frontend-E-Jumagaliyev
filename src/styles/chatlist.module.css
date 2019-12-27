@@ -6,13 +6,34 @@
   flex-direction: column-reverse;
 }
 
+.userlist {
+  border-radius: 2vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  bottom: 20vh;
+  left: 8vh;
+  width: 70%;
+  height: 30vh;
+  background-color: rgb(255, 197, 180);
+}
+
+.contacts {
+  text-align: center;
+  font-size: 3vh;
+  font-family: Segoe UI, sans-serif;
+  padding: 1vh 0;
+  border-bottom: 0.5vh solid rgb(235, 235, 235);
+}
+
 /* input */
 .create_chat {
   border-radius: 5vh;
   position: fixed;
   height: 4vh;
   width: 80%;
-  bottom: 15%;
+  bottom: 10vh;
   left: 2.5vh;
   font-size: 3vh;
   font-family: Segoe UI, sans-serif;
@@ -35,22 +56,10 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  animation: slidetoright 1s;
 }
 
 .user_box:hover:focus {
   background-color: rgb(194, 163, 187);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .user_box {
-    animation: none;
-  }
-}
-
-@keyframes slidetoright {
-  0% { transform: translate(200vw, 0); }
-  50% { transform: translate(0, 0); }
 }
 
 .avatar {
@@ -210,8 +219,15 @@ HEADER
   justify-content: flex-end;
 }
 
-.finder_btn img.findPic {
-  width: 4vh;
+.Login {
+  display: inline-block;
+  background-color: rgb(189, 189, 189);
+  color: rgb(255, 255, 255);
+  padding: 1vh;
+  font-size: 2vh;
+  border: none;
+  border-radius: 2vh;
+  cursor: pointer;
 }
 
 .finder_btn img.closePic {
